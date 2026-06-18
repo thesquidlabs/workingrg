@@ -201,14 +201,14 @@ nav.site-nav {
 nav.site-nav .nav-link {
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease;
+  color: @navy;
+  text-decoration: none;
 }
 
-nav.site-nav {
-  color:@navy;
-  text-decoration: none;
-  .nav-link.current {
-    border-color: @red;
-  }
+nav.site-nav .nav-link:hover,
+nav.site-nav .nav-link.active,
+nav.site-nav .nav-link.current {
+  border-color: @red;
 }
 
 .rule(@thickness: 3px, @color: red) {
