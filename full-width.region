@@ -1,6 +1,6 @@
 <!-- Content-only fragment (homepage middle region). Document open lives in header.region, close in footer.region. -->
 <div id="page" class="full-width" data-content-field="main-content">
   <main id="content">
-    {squarespace-main-content}
+    {squarespace.main-content}
   </main>
 </div>

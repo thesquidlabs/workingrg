@@ -1,4 +1,4 @@
 <!-- Content-only fragment. Document open lives in header.region, close in footer.region. -->
 <main data-content-field="main-content">
-  {squarespace-main-content}
+  {squarespace.main-content}
 </main>
