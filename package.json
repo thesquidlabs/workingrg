@@ -17,8 +17,7 @@
     "start": "run-script-os",
     "start:win32": "squarespace setup && concurrently \"npm run watch\" \"npm run authserver\"",
     "start:default": "squarespace setup && (npm run watch & npm run authserver)",
-    "deploy": "squarespace setup && squarespace deploy",
-    "sqs:index": "node .claude/scripts/sqs-index.js"
+    "deploy": "squarespace setup && squarespace deploy"
   },
   "repository": {
     "type": "git",
