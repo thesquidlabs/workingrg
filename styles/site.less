@@ -115,9 +115,9 @@ nav.site-nav {
   }
   
   .subtitle {
-    font-size: 1.875rem;
     color: @white;
-    font: @font-playfair @caps;
+    // Fullcaps Playfair via text-style mixin (@caps was an undefined var here).
+    .text-style(@font-playfair, 1.875rem, true);
   }
 }
 
@@ -163,7 +163,8 @@ nav.site-nav {
 
   .glass{
     opacity:.14;
-    background-image: @glasstexture;
+    // TODO: define @glasstexture token (texture asset) before enabling. Undefined var blocked compile.
+    // background-image: @glasstexture;
     .cutout{
       padding: @padding-s @padding-m;
       background-color: white; 
