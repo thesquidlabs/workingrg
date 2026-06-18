@@ -1,12 +1,8 @@
 <!-- Content-only fragment (homepage middle region). Document open lives in header.region, close in footer.region. -->
 <div id="page" class="full-width" data-content-field="main-content">
   <main id="content">
-    <!-- Stack the Sections collection on the homepage. collection = the collection's URL slug. -->
-    <squarespace:query collection="sections" limit="100">
-      {.repeated section items}
-        {@|apply section-fill.block}
-      {.end}
-    </squarespace:query>
+    <!-- Home = the Sections collection (set as homepage in CMS). Its sections.list renders -->
+    <!-- here via main-content at the site root — no query tag, no URL slug coupling. -->
     {squarespace.main-content}
   </main>
 </div>
