@@ -203,12 +203,12 @@ nav.site-nav .nav-link {
   transition: border-color 0.2s ease;
 }
 
-nav.site-nav .nav-link:hover,
-nav.site-nav .nav-link.active,
-nav.site-nav .nav-link.current {
-  border-color: @red;
-  color: @navy;
+nav.site-nav {
+  color:@navy;
   text-decoration: none;
+  .nav-link.current {
+    border-color: @red;
+  }
 }
 
 .rule(@thickness: 3px, @color: red) {
