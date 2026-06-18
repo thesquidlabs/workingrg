@@ -1,0 +1,7 @@
+<!-- Sections collection list view. Each item = one full-viewport scroll-snap section. -->
+<!-- Structure lives once in blocks/section-fill.block; applied per item (the "class"). -->
+{.repeated section items}
+  {@|apply section-fill.block}
+{.or}
+  No sections yet.
+{.end}
