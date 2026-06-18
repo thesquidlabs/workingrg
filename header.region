@@ -1,7 +1,7 @@
 ﻿<!--
 Full-width 100/9vw height White bar, logo at left and navigation at right, pinned to the top. \textbf{Scroll-lock} (sections lock and slide up beneath it) or \textbf{sticky only} (page scrolls beneath it). Fixed height, consistent across pages.
 -->
-<header class="site-header">
+<header class="site-header" data-content-field="main-content">
     <img src="logo.png" alt="Site Logo" class="site-logo">    </div>
     <nav class="site-nav">
     </nav>

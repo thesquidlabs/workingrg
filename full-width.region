@@ -2,15 +2,11 @@
 <html>
 <head>
     <squarespace:script src="site-bundle.js" combo="false" />
-    <squarespace:style-block />
 </head>
 <body>
-    <squarespace:header />
     <div id="page" class="full-width" data-content-field="main-content">
         <main id="content">
-            <squarespace:content-block />
         </main>
     </div>
-    <squarespace:footer />
 </body>
 </html>
