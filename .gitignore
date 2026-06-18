@@ -1,0 +1,11 @@
+.DS_Store
+sftp-config.json
+npm-debug.log
+
+node_modules
+build
+
+.claude
+CLAUDE.md
+.npmrc
+.env

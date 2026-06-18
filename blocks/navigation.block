@@ -1,0 +1,39 @@
+<!-- #TODO: Validate
+  Navigation: Row of four links (Home, Meet the Team, Receivership Process, Contact Us), navy center-justified Playfair Display 16pt. Links spaced by Gap padding and collection is right justifed on header. Active page only underlined with regular red rule. 
+-->
+<nav data-content-field="navigation-primary-nav" class="site-nav">
+  {.repeated section items}
+      {.folder?}
+        <a href="{collection.fullUrl}" class="nav-link">{collection.navigationTitle}</a>
+
+        <span>
+          {.repeated section items}
+            {.collection?}
+                <a href="{collection.fullUrl}" class="nav-link">
+                  {collection.navigationTitle}
+                </a>
+            {.end}
+            {.section externalLink}
+                <a href="{url}" class="nav-link"{.section newWindow} target="_blank"{.end}>
+                  {title}
+                </a>
+            {.end}
+          {.end}
+        </span>
+
+      {.or}
+
+        {.section collection}
+          <a href="{fullUrl}" class="nav-link">{navigationTitle}</a>
+        {.end}
+
+        {.section externalLink}
+          <a href="{url}" class="nav-link"{.section newWindow} target="_blank"{.end}>
+            {title}
+          </a>
+        {.end}
+
+      {.end}
+
+  {.end}
+</nav>

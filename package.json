@@ -1,0 +1,39 @@
+{
+  "name": "txrg-squarespace",
+  "version": "1.0.0",
+  "description": "Squarespace base template modified for modern systems and cross-compatibility",
+  "author": "Squarespace, Inc.",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "build": "run-script-os",
+    "build:win32": "squarespace assemble && webpack",
+    "build:default": "squarespace assemble && webpack",
+    "watch": "run-script-os",
+    "watch:win32": "concurrently \"squarespace assemble --watch\" \"webpack --watch\"",
+    "watch:default": "squarespace assemble --watch & webpack --watch --hide-modules",
+    "server": "squarespace runserver",
+    "authserver": "squarespace runserver --auth",
+    "start": "run-script-os",
+    "start:win32": "squarespace setup && concurrently \"npm run watch\" \"npm run authserver\"",
+    "start:default": "squarespace setup && (npm run watch & npm run authserver)",
+    "deploy": "squarespace setup && squarespace deploy",
+    "sqs:index": "node .claude/scripts/sqs-index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hbcrg/txrg"
+  },
+  "dependencies": {
+    "@squarespace/core": "^0.1.5",
+    "webpack-cli": "^7.0.2"
+  },
+  "devDependencies": {
+    "@squarespace/toolbelt": "^0.12.5",
+    "dotenv": "^2.0.0",
+    "terser-webpack-plugin": "^5.4.0",
+    "webpack": "^5.105.4",
+    "run-script-os": "^1.1.6",
+    "concurrently": "^8.2.0"
+  }
+}

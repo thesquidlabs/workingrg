@@ -1,0 +1,112 @@
+<!-- Horizontal Gallery: 3-item carousel, chevron navigation, position dots. -->
+<!-- JS: toggle .is-active on .hgallery__item and .hgallery__dot, disabled attr on chevrons. -->
+<section class="hgallery" data-gallery>
+
+  <div class="hgallery__viewport">
+
+    <button class="hgallery__chevron hgallery__chevron--prev" data-gallery-prev aria-label="Previous slide" disabled>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <div class="hgallery__track">
+      <div class="hgallery__item is-active">
+        <squarespace:block-field id="hgallery-item-1" columns="12" />
+      </div>
+      <div class="hgallery__item">
+        <squarespace:block-field id="hgallery-item-2" columns="12" />
+      </div>
+      <div class="hgallery__item">
+        <squarespace:block-field id="hgallery-item-3" columns="12" />
+      </div>
+    </div>
+
+    <button class="hgallery__chevron hgallery__chevron--next" data-gallery-next aria-label="Next slide">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </div>
+
+  <div class="hgallery__dots" data-gallery-dots>
+    <span class="hgallery__dot is-active" data-gallery-dot="0"></span>
+    <span class="hgallery__dot" data-gallery-dot="1"></span>
+    <span class="hgallery__dot" data-gallery-dot="2"></span>
+  </div>
+
+</section>
+
+<style>
+// hgallery — horizontal gallery carousel
+// Move to styles/site.less before deploy
+
+@hgallery-dot-size: @padding-s;
+
+.hgallery {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: @padding-s;
+}
+
+.hgallery__viewport {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: @padding-xs;
+}
+
+.hgallery__track {
+  flex: 1;
+  min-width: 0;
+}
+
+.hgallery__item {
+  display: none;
+}
+
+.hgallery__item.is-active {
+  display: block;
+}
+
+.hgallery__chevron {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: @navy;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: @padding-xs;
+  width: @padding-m;
+  height: @padding-m;
+}
+
+.hgallery__chevron[disabled] {
+  color: @silver;
+  cursor: default;
+  pointer-events: none;
+}
+
+.hgallery__dots {
+  display: flex;
+  align-items: center;
+  gap: @padding-xs;
+}
+
+.hgallery__dot {
+  width: @hgallery-dot-size;
+  height: @hgallery-dot-size;
+  border-radius: 50%;
+  background: @silver;
+  cursor: pointer;
+}
+
+.hgallery__dot.is-active {
+  background: @smoke;
+}
+</style>

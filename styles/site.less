@@ -1,0 +1,212 @@
+//Colors
+@navy:   #1d2758;
+@red:    #bf1f41;
+@white:  #ffffff;
+@smoke:  #f5f5f5;
+@silver: #b2b2b2;
+
+//Global spacing variables
+@padding-xs: 10/9vw;
+@padding-s: 20/9vw;
+@padding-m: 40/9vw;
+@padding-gap: 50/9vw;
+@padding-l: 60/9vw;
+
+//Font family
+@font-playfair: 'Playfair Display', serif;
+@font-lato: 'Lato', sans-serif;
+
+// Fullcaps
+.text-style(@family, @size, @caps: false) {
+  font-family: @family;
+  font-size: @size;
+  
+  & when (@caps = true) {
+    text-transform: uppercase;
+    font-variant-caps: all-small-caps;
+  }
+}
+
+.site-header {
+  width: 100%;
+  height: 2.5*@padding-m;
+
+  background: @white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-footer{
+  width: 100%;
+  height: 2.5*@padding-m;
+  background: @white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#siteWrapper, #site, .site-header, .site-footer {
+  padding-left: @padding-l;
+  padding-right: @padding-l;
+  box-sizing: border-box;
+}
+
+.site-logo {
+  width: 6.5*@padding-m;
+  height: auto;
+}
+
+nav.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font: 1rem @font-playfair;
+  color: @navy;
+
+  & > * + * {
+        margin-left: @padding-gap;
+    }
+} 
+.hero{
+  width: 100%;
+  height:auto
+  max-height: 100vh-2.5*@padding-m;
+  object-fit: cover;
+  
+  // Create a single-cell grid that spans the area of the image
+  display: grid;
+  & > * {
+    grid-area: 1 / 1;
+  }
+
+  .box{
+    justify-self: end;
+    align-self: end;
+    padding: @padding-s @padding-s @padding-xs @padding-s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: @navy;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    color: @white;
+    font: @font-playfair;
+  }
+  
+  .subtitle {
+    font-size: 1.875rem;
+    color: @white;
+    font: @font-playfair @caps;
+  }
+}
+
+.subheading {
+  width: 100%;
+  height:auto;
+  padding: @padding-s @padding-m;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  box-sizing: border-box;
+  background-color: @smoke;
+
+  .body {
+    text-align: left;
+    font-size: 1.25rem;
+    max-width: 100%;
+    font: @font-playfair;
+    color: @navy
+  }
+}
+
+.section-header {
+  width: 100%;
+  height: @padding-l;
+  display: flex;
+  background-color: @navy;
+  align-items: center;
+  justify-content: center;
+  padding: @padding-xs;
+  box-sizing: border-box;
+
+  .title{  
+    size: 1.875rem;
+    color: @white;
+    font: @font-playfair;
+    }
+}
+.glass-image {
+  width:100%;
+  height: auto;
+  max-height: 100vh-2.5*@padding-m;
+
+  .glass{
+    opacity:.14;
+    background-image: @glasstexture;
+    .cutout{
+      padding: @padding-s @padding-m;
+      background-color: white; 
+      mix-blend-mode: destination-out;
+      pointer-events: none;
+      display: inline-block;
+    }
+  }
+}
+.about-card {
+    font-size: ;
+    color: ;
+    font: ;
+    font-weight: ;
+}
+
+.body {
+    font-size: ;
+    color: ;
+    font: ;
+    font-weight: ;
+}
+
+.links {
+    font-size: ;
+    color: ;
+    font: ;
+    font-weight: ;
+}
+
+
+
+nav.header-nav .nav-link {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+nav.header-nav .nav-link:hover,
+nav.header-nav .nav-link.active,
+nav.header-nav .nav-link.current {
+  border-color: @red;
+}
+
+.rule(@thickness: 3px, @color: red) {
+  display: block;
+  width: 100%;
+  height: @thickness;
+  background-color: @color;
+  border: none; // Reset default <hr> styling
+  margin: 0;   // Adjust as needed for your specific layout
+}
+.rule-bold {
+  .rule(5px, red);
+}
+
+
+/* TODO: Implement
+  {Chevron}:20/9vw Arrow mark, paired, rotated as needed, in Smoke. Spacer padding on left/right, vertically aligned with gallery. 
+  
+  {Title Banner} Full-width navy bar, centered white Playfair Display text at 30pt, Bold red rule on the bottom edge .
+  {Call-to-Action Button} Red rectangle with a right-pointing arrow from its right end; Lato fullcaps white label.
+  {Heading} Left-aligned Playfair Display 30pt in Navy or White with a Regular red rule beneath, spanning the content width less padding.
+  */

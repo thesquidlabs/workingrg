@@ -1,0 +1,6 @@
+﻿<!-- #TODO: Validate
+    Full-width 100/9vw height White bar, logo centered. Fixed height, consistent across pages.
+    -->
+<footer class="site-footer">
+        <img src="logo.png" alt="Site Logo" class="site-logo">
+</footer>

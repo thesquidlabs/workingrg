@@ -1,0 +1,7 @@
+<div class="folder-list">
+  {.repeated section items}
+    <div class="folder-item">
+      <a href="{fullUrl}">{navigationTitle}</a>
+    </div>
+  {.end}
+</div>
