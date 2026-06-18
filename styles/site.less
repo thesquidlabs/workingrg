@@ -16,15 +16,15 @@
 @font-playfair: 'Playfair Display', serif;
 @font-lato: 'Lato', sans-serif;
 
+.text-style(@family, @size, @caps: false) when (@caps = false) { 
+  font-family: @family; 
+  font-size: @size; 
+}
 // Fullcaps
-.text-style(@family, @size, @caps: false) {
-  font-family: @family;
-  font-size: @size;
-  
-  & when (@caps = true) {
-    text-transform: uppercase;
-    font-variant-caps: all-small-caps;
-  }
+.text-style(@family, @size, @caps: false) when (@caps = true) { 
+  font-family: @family; 
+  font-size: @size; 
+  text-transform: uppercase;
 }
 
 .site-header {
@@ -208,5 +208,4 @@ nav.header-nav .nav-link.current {
   
   {Title Banner} Full-width navy bar, centered white Playfair Display text at 30pt, Bold red rule on the bottom edge .
   {Call-to-Action Button} Red rectangle with a right-pointing arrow from its right end; Lato fullcaps white label.
-  {Heading} Left-aligned Playfair Display 30pt in Navy or White with a Regular red rule beneath, spanning the content width less padding.
   */
