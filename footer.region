@@ -1,6 +1,13 @@
-﻿<!-- #TODO: Validate
-    Full-width 100/9vw height White bar, logo centered. Fixed height, consistent across pages.
-    -->
-<footer class="site-footer" data-content-field="main-content">
-        <img src="logo.png" alt="Site Logo" class="site-logo">
-</footer>
+<!--
+Full-width 100/9vw height White bar, logo centered. Fixed height, consistent across pages.
+Owns the document close: {squarespace-footers} + </body></html>.
+-->
+    <footer class="site-footer">
+      <squarespace:block-field id="footer-logo" columns="1" label="Logo" />
+    </footer>
+    <script type="text/javascript" src="/scripts/site-bundle.js"></script>
+
+    {squarespace-footers}
+
+  </body>
+</html>

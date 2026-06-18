@@ -12,6 +12,10 @@
 @padding-gap: 50/9vw;
 @padding-l: 60/9vw;
 
+//Header
+@header-height: 2.5 * @padding-m; // = 100/9vw, fixed bar height (header + footer)
+@z-header: 1000;                  // header stacking above page content
+
 //Font family
 @font-playfair: 'Playfair Display', serif;
 @font-lato: 'Lato', sans-serif;
@@ -29,7 +33,13 @@
 
 .site-header {
   width: 100%;
-  height: 2.5*@padding-m;
+  height: @header-height;
+
+  // Scroll-lock pin: header fixed to top, page scrolls beneath.
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: @z-header;
 
   background: @white;
   display: flex;
@@ -37,9 +47,15 @@
   align-items: center;
 }
 
+// Offset page content so the fixed header does not overlap the first section.
+// Direct body children only (sibling of <header>), so full-width's nested <main> is not double-padded.
+body > main, body > #page {
+  padding-top: @header-height;
+}
+
 .site-footer{
   width: 100%;
-  height: 2.5*@padding-m;
+  height: @header-height;
   background: @white;
   display: flex;
   align-items: center;
@@ -52,7 +68,8 @@
   box-sizing: border-box;
 }
 
-.site-logo {
+// Logo block-field (header + footer). Retargeted from the old static .site-logo img.
+#header-logo, #footer-logo {
   width: 6.5*@padding-m;
   height: auto;
 }
@@ -179,14 +196,14 @@ nav.site-nav {
 
 
 
-nav.header-nav .nav-link {
+nav.site-nav .nav-link {
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease;
 }
 
-nav.header-nav .nav-link:hover,
-nav.header-nav .nav-link.active,
-nav.header-nav .nav-link.current {
+nav.site-nav .nav-link:hover,
+nav.site-nav .nav-link.active,
+nav.site-nav .nav-link.current {
   border-color: @red;
 }
 

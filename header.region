@@ -1,8 +1,20 @@
-﻿<!--
-Full-width 100/9vw height White bar, logo at left and navigation at right, pinned to the top. \textbf{Scroll-lock} (sections lock and slide up beneath it) or \textbf{sticky only} (page scrolls beneath it). Fixed height, consistent across pages.
+<!--
+Full-width 100/9vw height White bar, logo at left and navigation at right, pinned to the top (scroll-lock: header fixed, sections slide up beneath). Fixed height, consistent across pages.
+Owns the document open: doctype + head ({squarespace-headers}) + opening <body>. Footer region closes </body></html>.
 -->
-<header class="site-header" data-content-field="main-content">
-    <img src="logo.png" alt="Site Logo" class="site-logo">    </div>
-    <nav class="site-nav">
-    </nav>
-</header>
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:wght@400;700|Lato:wght@400;700" rel="stylesheet">
+
+    {squarespace-headers}
+    <squarespace:script data-preserve-html-node="true" src="site.js" combo="false"/>
+
+  </head>
+  <body id="{squarespace.page-id}" class="{squarespace.page-classes}">
+    <header class="site-header">
+      <squarespace:block-field id="header-logo" columns="1" label="Logo" />
+      <squarespace:navigation navigationId="mainNav" template="navigation" />
+    </header>

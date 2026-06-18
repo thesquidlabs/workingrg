@@ -1,24 +1,4 @@
-﻿<!doctype html>
-<html>
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-
-    {squarespace-headers}
-    <squarespace:script data-preserve-html-node="true" src="site.js" combo="false"/>
-
-  </head>
-  <body id="{squarespace.page-id}" class="{squarespace.page-classes}">
-<p>Hello, World! :)</p>
-    
-      <squarespace:navigation navigationId="mainNav" template="navigation" />
-    <main data-content-field="main-content">
-      {squarespace-main-content}
-    </main>
-    <script type="text/javascript" src="/scripts/site-bundle.js"></script>
-
-    {squarespace-footers}
-
-  </body>
-</html>
+<!-- Content-only fragment. Document open lives in header.region, close in footer.region. -->
+<main data-content-field="main-content">
+  {squarespace-main-content}
+</main>

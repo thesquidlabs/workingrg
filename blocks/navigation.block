@@ -24,7 +24,7 @@
       {.or}
 
         {.section collection}
-          <a href="{fullUrl}" class="nav-link">{navigationTitle}</a>
+          <a href="{fullUrl}" class="nav-link{.section active} active{.end}">{navigationTitle}</a>
         {.end}
 
         {.section externalLink}
