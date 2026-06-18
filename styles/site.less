@@ -31,6 +31,13 @@
   text-transform: uppercase;
 }
 
+// Scroll-snap root. Sections align below the fixed header via scroll-padding-top.
+// `mandatory` is inert on pages with no .section-fill children, so this is safe site-wide.
+html {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: @header-height;
+}
+
 .site-header {
   width: 100%;
   height: @header-height;
@@ -175,6 +182,23 @@ nav.site-nav {
     }
   }
 }
+
+// Generic full-viewport section: fills viewport minus the fixed header and
+// snaps into place. Mirrors the .hero / .glass-image viewport math.
+.section-fill {
+  width: 100%;
+  height: 100vh-2.5*@padding-m;   // viewport minus @header-height (mirror existing)
+  box-sizing: border-box;
+
+  // Scroll-snap: one section per scroll, flush under the fixed header.
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  display: flex;            // sensible default for centered section content
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 // .about-card {
 //     font-size: ;
 //     color: ;
@@ -198,7 +222,7 @@ nav.site-nav {
 
 
 
-nav.site-nav.nav-link {
+nav.site-nav .nav-link {
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease;
   color: @navy;
