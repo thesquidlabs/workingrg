@@ -1,6 +1,6 @@
 <!--
 Full-width 100/9vw height White bar, logo centered. Fixed height, consistent across pages.
-Owns the document close: {squarespace-footers} + </body></html>.
+Owns the document close: squarespace-footers tag + closing body/html.
 -->
     <footer class="site-footer">
       <squarespace:block-field id="footer-logo" columns="1" label="Logo" />

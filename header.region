@@ -1,6 +1,6 @@
 <!--
 Full-width 100/9vw height White bar, logo at left and navigation at right, pinned to the top (scroll-lock: header fixed, sections slide up beneath). Fixed height, consistent across pages.
-Owns the document open: doctype + head ({squarespace-headers}) + opening <body>. Footer region closes </body></html>.
+Owns the document open: doctype + head (squarespace-headers tag) + opening body. Footer region closes the body/html.
 -->
 <!doctype html>
 <html>
