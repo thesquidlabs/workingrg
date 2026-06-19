@@ -187,7 +187,9 @@ nav.site-nav {
 // Mirrors the .hero overlay grid + viewport math.
 .section-fill {
   width: 100%;
-  height: 100vh-2.5*@padding-m;   // viewport minus @header-height (mirror existing)
+  // Viewport minus the fixed header. calc() mixes vh/vw at runtime; legacy LESS would
+  // otherwise mis-subtract the vw header value as vh. @{header-height} interpolates the token.
+  height: ~"calc(100vh - @{header-height})";
   box-sizing: border-box;
   background-color: @navy;        // fallback behind image
 
