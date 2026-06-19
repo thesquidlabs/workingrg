@@ -1,9 +1,8 @@
-<!-- Section Fill: reusable full-viewport (minus fixed header) scroll-snap section. -->
-<!-- The reusable "class": applied per Sections-collection item via {@|apply section-fill.block}. -->
-<!-- Scope = the current item, so {title}/{body}/{@|image-meta} resolve against it. -->
-<!-- NOTE: <squarespace:block-field> is illegal inside a .block (region/page only); editable -->
-<!-- image/text comes from the collection item, not an embedded block-field. -->
-<!-- Styles in styles/site.less (.section-fill + html scroll-snap root). -->
+<!-- Section Fill: reusable full-viewport scroll-snap section. -->
+<!-- Applied per Sections-collection item; scope is the current item. -->
+<!-- Editable image/text come from the collection item, not a block-field. -->
+<!-- Styles: styles/site.less .section-fill -->
+<!-- IMPORTANT: never put JSON-T template tags in comments here - they still evaluate. -->
 <section class="section-fill" data-section-fill>
   {.main-image?}<img class="section-fill__image" {@|image-meta} />{.end}
   <div class="section-fill__content">
