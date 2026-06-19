@@ -67,6 +67,11 @@ body > main, body > #page {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  // Snap target so mandatory snap can rest here. Without it, the footer (shorter than
+  // a section, no snap point) is unreachable — snap pulls back to the last section.
+  // `end` aligns the footer's bottom to the viewport bottom.
+  scroll-snap-align: end;
 }
 
 #siteWrapper, #site, .site-header, .site-footer {
@@ -195,6 +200,12 @@ nav.site-nav {
   overflow: hidden;               // image cannot blow the section past its fixed height
   background-color: @navy;        // fallback behind image
 
+  // Anchor the content box to the bottom. Image is absolute (out of flow) so this flex
+  // lays out only the text box. Mirrors .hero overlay-at-bottom.
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
   // Scroll-snap: one section per scroll, flush under the fixed header.
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -209,15 +220,14 @@ nav.site-nav {
     object-fit: cover;
   }
 
-  // Content layer above the image, anchored to the bottom (mirror .hero box).
+  // Text box above the image. Navy backing (mirror .hero .box) so white text stays
+  // legible over any image. Shrink-wraps content at the bottom-left.
   .section-fill__content {
     position: relative;
     z-index: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    align-self: flex-start;
     padding: @padding-m;
+    background-color: @navy;
     color: @white;
   }
 
