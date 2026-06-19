@@ -2,8 +2,11 @@
 <!-- Applied per Sections-collection item; scope is the current item. -->
 <!-- Editable image/text come from the collection item, not a block-field. -->
 <!-- Styles: styles/site.less .section-fill -->
+<!-- Variant: customContent.sectionType (a text field) is slugified into a BEM modifier -->
+<!-- class (e.g. "hero" -> .section-fill--hero). Scope into customContent first; dot- -->
+<!-- notation resolves from top-level, not item scope. Empty/missing -> base class only. -->
 <!-- IMPORTANT: never put JSON-T template tags in comments here - they still evaluate. -->
-<section class="section-fill" data-section-fill>
+<section class="section-fill{.section customContent} section-fill--{sectionType|slugify}{.end}" data-section-fill>
   {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
   <div class="section-fill__content">
     <h2 class="section-fill__title">{title}</h2>

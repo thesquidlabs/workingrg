@@ -97,42 +97,6 @@ nav.site-nav {
         margin-left: @padding-gap;
     }
 } 
-.hero{
-  width: 100%;
-  height:auto;
-  max-height: 100vh-2.5*@padding-m;
-  object-fit: cover;
-  
-  // Create a single-cell grid that spans the area of the image
-  display: grid;
-  & > * {
-    grid-area: 1 / 1;
-  }
-
-  .box{
-    justify-self: end;
-    align-self: end;
-    padding: @padding-s @padding-s @padding-xs @padding-s;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background-color: @navy;
-  }
-  
-  .title {
-    font-size: 1.5rem;
-    color: @white;
-    font: @font-playfair;
-  }
-  
-  .subtitle {
-    color: @white;
-    // Fullcaps Playfair via text-style mixin (@caps was an undefined var here).
-    .text-style(@font-playfair, 1.875rem, true);
-  }
-}
-
 .subheading {
   width: 100%;
   height:auto;
@@ -235,6 +199,27 @@ nav.site-nav {
     .text-style(@font-playfair, 1.875rem, true);
   }
 }
+
+// Section variant: Hero. Driven by the CMS "Section Type" field (sectionType -> hero),
+// emitted as the .section-fill--hero modifier by blocks/section-fill.block. Folds the
+// former .hero look into the scroll-snap section: navy content box anchored bottom-right
+// over the full-bleed image, with a bold red rule on its bottom edge (cf. blocks/hero.block).
+// To add another type: copy this block as .section-fill--<slug>; no template/conf change.
+.section-fill--hero {
+
+  // Anchor the content box to the bottom-right corner (base anchors bottom-left).
+  .section-fill__content {
+    align-self: flex-end;
+    padding: @padding-s @padding-s @padding-xs @padding-s;
+    border-bottom: 5px solid @red;   // bold red rule, matching .rule-bold thickness
+  }
+
+  // Smaller, mixed-case Playfair title for the hero banner (base is fullcaps 1.875rem).
+  .section-fill__title {
+    .text-style(@font-playfair, 1.5rem);
+  }
+}
+
 // .about-card {
 //     font-size: ;
 //     color: ;
