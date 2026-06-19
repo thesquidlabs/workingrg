@@ -186,31 +186,37 @@ nav.site-nav {
 // snaps into place. One instance per "Sections" collection item (image + title + body).
 // Mirrors the .hero overlay grid + viewport math.
 .section-fill {
+  position: relative;             // positioning context for the absolute image
   width: 100%;
   // Viewport minus the fixed header. calc() mixes vh/vw at runtime; legacy LESS would
   // otherwise mis-subtract the vw header value as vh. @{header-height} interpolates the token.
   height: ~"calc(100vh - @{header-height})";
   box-sizing: border-box;
+  overflow: hidden;               // image cannot blow the section past its fixed height
   background-color: @navy;        // fallback behind image
 
   // Scroll-snap: one section per scroll, flush under the fixed header.
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
-  // Single-cell grid so content overlays the image (mirror .hero).
-  display: grid;
-  & > * {
-    grid-area: 1 / 1;
-  }
-
+  // Image full-bleed behind content. Absolute + inset so it fills the section exactly.
   .section-fill__image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
+  // Content layer above the image, anchored to the bottom (mirror .hero box).
   .section-fill__content {
-    align-self: end;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     padding: @padding-m;
     color: @white;
   }

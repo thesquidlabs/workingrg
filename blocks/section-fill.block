@@ -4,7 +4,7 @@
 <!-- Styles: styles/site.less .section-fill -->
 <!-- IMPORTANT: never put JSON-T template tags in comments here - they still evaluate. -->
 <section class="section-fill" data-section-fill>
-  {.main-image?}<img class="section-fill__image" {@|image-meta} />{.end}
+  {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
   <div class="section-fill__content">
     <h2 class="section-fill__title">{title}</h2>
     {body}
