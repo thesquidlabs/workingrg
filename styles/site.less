@@ -226,10 +226,12 @@ nav.site-nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: @smoke;
-    opacity: .14;
-    isolation: isolate;
-    z-index: 1;                              // above image, below content columns
+    // Transparency baked into the color (NOT element opacity). element-opacity renders the
+    // layer to a buffer and multiplies it, which suppresses the child's destination-out
+    // knockout; a semi-transparent background keeps the cutout's blend working.
+    background-color: fade(@smoke, 14%);
+    isolation: isolate;                       // confine the cutout blend to this layer (erase smoke, keep image)
+    z-index: 1;                               // above image, below content columns
   }
 
   // Cutout: carves a hole in the glass over the LEFT-column region, revealing the image beneath.
