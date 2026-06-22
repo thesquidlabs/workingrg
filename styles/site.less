@@ -340,12 +340,17 @@ nav.site-nav {
 .section-fill--showcase {
 
   // Each card fills the section and stacks on its siblings; only the active card shows.
+  // The card (not the section) now hosts the cols, so it must reproduce the section's vertical
+  // centering (.section-fill--window justify-content:center) - otherwise cols pin to the card top.
   .section-fill__card {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: opacity @showcase-fade ease;
