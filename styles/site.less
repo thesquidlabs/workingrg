@@ -11,6 +11,7 @@
 @padding-m: 40/9vw;
 @padding-gap: 50/9vw;
 @padding-l: 60/9vw;
+@phi = 1.618;
 
 //Header
 @header-height: 2.5 * @padding-m; 
@@ -196,7 +197,7 @@ nav.site-nav {
   }
 
   .section-fill__title {
-    .text-style(@font-playfair, 1.875rem, true);
+    .text-style(@font-playfair, 1.875rem, false);
   }
 }
 
@@ -211,7 +212,8 @@ nav.site-nav {
   .section-fill__content {
     align-self: flex-end;
     padding: @padding-s @padding-m @padding-xs @padding-m;
-    border-bottom: 5px solid @red;   // bold red rule, matching .rule-bold thickness
+    border-bottom: 5px solid @red;
+    max-width : 1/@phi;  
   }
 
   // Smaller, mixed-case Playfair title for the hero banner (base is fullcaps 1.875rem).
