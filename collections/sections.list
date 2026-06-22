@@ -1,9 +1,15 @@
 <!-- Sections collection list view. Each item = one full-viewport scroll-snap section. -->
-<!-- Structure lives once in blocks/section-fill.block; applied per item (the "class"). -->
+<!-- Dispatch on the CMS "Section Type" field (customContent.sectionType): each structural -->
+<!-- variant maps to its own .block. Add a branch per type. The literal is QUOTED -->
+<!-- ({.equal? sectionType "window"}); an unquoted arg gets dereferenced as a key (empty). -->
+<!-- Read sectionType as a bare key INSIDE {.section customContent} (current-scope lookup); a -->
+<!-- dotted customContent.sectionType would resolve from top-level, not the item. Capture the -->
+<!-- item with {.var @item @} so each block keeps ITEM scope (applying at customContent scope -->
+<!-- would lose item-level {title}/{body}/{assetUrl}). -->
 {.repeated section items}
   {.var @item @}
   {.section customContent}
-    {.equal? sectionType window}
+    {.equal? sectionType "window"}
       {@item|apply window.block}
     {.or}
       {@item|apply section-fill.block}
