@@ -274,7 +274,7 @@ nav.site-nav {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: @padding-s;                         // vertical rhythm between right-col panes
+    gap: @padding-m;                         // vertical rhythm between right-col panes
   }
 
   // Title: navy box, full col width, normal Playfair 2.5rem white.
@@ -292,7 +292,7 @@ nav.site-nav {
     .text-style(@font-playfair, 2.5rem, true);
     color: @white;
     padding-left: 0;
-    &::after { .rule(5px, @red); margin-top: @padding-s; }   // .rule-bold under the text
+    &::after { content: ""; .rule(5px, @red); margin-top: @padding-s; }   // .rule-bold under the text
   }
 
   // Body: smoke box, full col width, normal Lato 1.75rem navy.
