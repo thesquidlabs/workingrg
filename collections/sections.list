@@ -9,7 +9,13 @@
   {.var @item @}
   {.section customContent}
     {.equal? sectionType "showcase"}
-      {@item|apply showcase-window.block}
+      <section class="section-fill section-fill--window section-fill--showcase" data-section-fill data-showcase>
+        <squarespace:query collection="showcase">
+          {.repeated section items}
+            {@|apply showcase-card.block}
+          {.end}
+        </squarespace:query>
+      </section>
     {.or}{.equal? sectionType "window"}
       {@item|apply window.block}
     {.or}
