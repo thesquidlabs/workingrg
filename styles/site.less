@@ -226,7 +226,9 @@ nav.site-nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: fade(@smoke, 14%);      // transparency in the color, not element-opacity
+    background-color: fade(@smoke, 14%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);      // transparency in the color, not element-opacity
     z-index: 1;                               // above image, below content columns
 
     // Knock a rectangular window in the smoke over the LEFT column so the image shows through.
