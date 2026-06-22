@@ -139,9 +139,9 @@ nav.site-nav {
   max-height: 100vh-2.5*@padding-m;
 
   .glass{
+    background-color: @smoke;
     opacity:.14;
-    // TODO: define @glasstexture token (texture asset) before enabling. Undefined var blocked compile.
-    // background-image: @glasstexture;
+    // TODO: swap @smoke for a @glasstexture token (texture asset) once available.
     .cutout{
       padding: @padding-s @padding-m;
       background-color: white; 
@@ -225,6 +225,88 @@ nav.site-nav {
   // CMS-driven subtitle under the title: fullcaps Playfair, larger than the title.
   .section-fill__subtitle {
     .text-style(@font-playfair, 2.5rem, true);
+  }
+}
+
+// Section variant: Window. Two-column layout dispatched via blocks/window.block (sectionType=="window").
+// Left: glass-image + cutout. Right: stacked title/subtitle/body/link panes. Enclosed by @padding-l margins
+// with an @padding-l gap; golden-ratio column split (cutout edge at 100vw/@phi, mirroring hero's @phi math).
+.section-fill--window {
+  justify-content: center;                  // base anchors content bottom; window centers the columns
+
+  .section-fill__cols {
+    display: flex;
+    flex-direction: row;
+    gap: @padding-l;                         // spacing between columns
+    padding-left: @padding-l;                // left/right enclosing margins
+    padding-right: @padding-l;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: stretch;
+  }
+
+  // Golden-ratio split (NOT equal): left col's right edge (the cutout edge) lands at 100vw/@phi.
+  // Subtract the @padding-l left margin so the edge is measured from the viewport, like hero's @phi math.
+  .section-fill__col--left { flex: none; width: (100vw / @phi) - @padding-l; min-width: 0; }
+
+  .section-fill__col--right {
+    flex: 1;                                 // takes the remaining width (golden-ratio remainder)
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: @padding-s;                         // vertical rhythm between right-col panes
+  }
+
+  // Title: navy box, full col width, normal Playfair 2.5rem white.
+  .section-fill__title {
+    .text-style(@font-playfair, 2.5rem, false);
+    background-color: @navy;
+    color: @white;
+    padding: @padding-s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  // Subtitle: no box, no left padding, fullcaps Playfair 2.5rem white, bold red rule @padding-s under text.
+  .section-fill__subtitle {
+    .text-style(@font-playfair, 2.5rem, true);
+    color: @white;
+    padding-left: 0;
+    &::after { .rule(5px, @red); margin-top: @padding-s; }   // .rule-bold under the text
+  }
+
+  // Body: smoke box, full col width, normal Lato 1.75rem navy.
+  .section-fill__body {
+    .text-style(@font-lato, 1.75rem, false);
+    background-color: @smoke;
+    color: @navy;
+    padding: @padding-s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  // Link: red banner, left-justified in col, fullcaps Lato 1.75rem white label, right edge a triangle point.
+  .section-fill__link {
+    .text-style(@font-lato, 1.75rem, true);
+    align-self: flex-start;                  // justified left, shrink-wrap
+    position: relative;
+    display: inline-block;
+    background-color: @red;
+    color: @white;
+    padding: @padding-s;
+    text-decoration: none;
+    // Border-triangle: pseudo-element points right, replacing the banner's right edge.
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 0;
+      height: 0;
+      border-top: (@padding-s + 0.875rem) solid transparent;     // ~half banner height each
+      border-bottom: (@padding-s + 0.875rem) solid transparent;
+      border-left: @padding-s solid @red;                        // point extends right
+    }
   }
 }
 

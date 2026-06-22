@@ -1,0 +1,21 @@
+<!-- Section Fill variant: Window. Two-column layout. Dispatched from sections.list when sectionType=="window". -->
+<!-- Left: glass-image + cutout mask. Right: title/subtitle/body/link panes. Styles: site.less .section-fill--window -->
+<!-- Custom fields live under customContent; scope in to read. IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+<section class="section-fill section-fill--window" data-section-fill>
+  <div class="section-fill__cols">
+    <div class="section-fill__col section-fill__col--left">
+      <div class="glass-image">
+        {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
+        <div class="glass"><div class="cutout"></div></div>
+      </div>
+    </div>
+    <div class="section-fill__col section-fill__col--right">
+      <h2 class="section-fill__title">{title}</h2>
+      {.section customContent}{.section subtitle}<p class="section-fill__subtitle">{@}</p>{.end}{.end}
+      <div class="section-fill__body">{body}</div>
+      {.var @lurl customContent.linkUrl}
+      {.var @llabel customContent.linkLabel}
+      {.section customContent}{.section linkUrl}<a class="section-fill__link" href="{@lurl}">{@llabel}</a>{.end}{.end}
+    </div>
+  </div>
+</section>
