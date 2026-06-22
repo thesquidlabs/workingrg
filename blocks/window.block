@@ -8,7 +8,7 @@
   <div class="section-fill__cols">
     <div class="section-fill__col section-fill__col--left"></div>
     <div class="section-fill__col section-fill__col--right">
-      <h2 class="section-fill__title">{title}</h2>
+      {.title?}<h2 class="section-fill__title">{title}</h2>{.end}
       {.section customContent}{.section subtitle}<p class="section-fill__subtitle">{@}</p>{.end}{.end}
       <div class="section-fill__body">{body}</div>
       {.var @lurl customContent.linkUrl}
