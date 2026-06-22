@@ -1,11 +1,10 @@
 <!-- Sections collection list view. Each item = one full-viewport scroll-snap section. -->
-<!-- Dispatch on the CMS "Section Type" field (customContent.sectionType): each structural -->
-<!-- variant maps to its own .block. Add a branch per type. The literal is QUOTED -->
-<!-- ({.equal? sectionType "window"}); an unquoted arg gets dereferenced as a key (empty). -->
-<!-- Read sectionType as a bare key INSIDE {.section customContent} (current-scope lookup); a -->
-<!-- dotted customContent.sectionType would resolve from top-level, not the item. Capture the -->
-<!-- item with {.var @item @} so each block keeps ITEM scope (applying at customContent scope -->
-<!-- would lose item-level {title}/{body}/{assetUrl}). -->
+<!-- IMPORTANT: never write JSON-T tags (braces) in comments here - they still evaluate and -->
+<!-- break parsing. Dispatch on the CMS "Section Type" field per item: each structural variant -->
+<!-- maps to its own block. The equal-predicate literal must be QUOTED; an unquoted arg is -->
+<!-- dereferenced as a key. Read sectionType as a bare key inside the customContent section -->
+<!-- (current scope); a dotted path would resolve from top-level. The item is captured first so -->
+<!-- each applied block keeps item scope (applying at customContent scope loses title/body/image). -->
 {.repeated section items}
   {.var @item @}
   {.section customContent}
