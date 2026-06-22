@@ -1,0 +1,18 @@
+<!-- Showcase card: one Showcase-collection item rendered as a window-layout pane. -->
+<!-- Applied per item from the <squarespace:query> loop in collections/sections.list (sectionType=="showcase"). -->
+<!-- squarespace: tags must live in the .list, NOT in a .block - this file is pure markup applied at the -->
+<!-- query item's scope. Mirrors window.block: image + glass + cols; only subtitle (item title) and the -->
+<!-- "More Details" link (customContent.linkUrl) panes are populated. Styles inherited from -->
+<!-- .section-fill--window + .section-fill--showcase (site.less). JS pin hook: data-showcase-card. -->
+<!-- IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+<div class="section-fill__card" data-showcase-card>
+  {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
+  <div class="glass"></div>
+  <div class="section-fill__cols">
+    <div class="section-fill__col section-fill__col--left"></div>
+    <div class="section-fill__col section-fill__col--right">
+      {.equal? title ""}{.or}<p class="section-fill__subtitle">{title}</p>{.end}
+      {.section customContent}{.equal? linkUrl ""}{.or}<a class="section-fill__link" href="{linkUrl}">More Details</a>{.end}{.end}
+    </div>
+  </div>
+</div>
