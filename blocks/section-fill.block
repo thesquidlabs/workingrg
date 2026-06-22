@@ -9,7 +9,7 @@
 <section class="section-fill{.section customContent} section-fill--{sectionType|slugify}{.end}" data-section-fill>
   {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
   <div class="section-fill__content">
-    <h2 class="section-fill__title">{title}</h2>
+    {.title?}<h2 class="section-fill__title">{title}</h2>{.end}
     {.section customContent}{.section subtitle}<p class="section-fill__subtitle">{@}</p>{.end}{.end}
     {body}
   </div>
