@@ -226,25 +226,18 @@ nav.site-nav {
     left: 0;
     width: 100%;
     height: 100%;
-    // Transparency baked into the color (NOT element opacity). element-opacity renders the
-    // layer to a buffer and multiplies it, which suppresses the child's destination-out
-    // knockout; a semi-transparent background keeps the cutout's blend working.
-    background-color: fade(@smoke, 14%);
-    isolation: isolate;                       // confine the cutout blend to this layer (erase smoke, keep image)
+    background-color: fade(@smoke, 14%);      // transparency in the color, not element-opacity
     z-index: 1;                               // above image, below content columns
-  }
 
-  // Cutout: carves a hole in the glass over the LEFT-column region, revealing the image beneath.
-  // Right edge at 100vw/@phi (mirrors hero @phi math); left edge at the @padding-l margin; full height.
-  .cutout {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: @padding-l;
-    width: (100vw / @phi) - @padding-l;
-    background-color: @white;
-    mix-blend-mode: destination-out;
-    pointer-events: none;
+    // Knock a rectangular window in the smoke over the LEFT column so the image shows through.
+    // A mask affects ONLY this element, so the sibling image below is untouched (a blend knockout
+    // bled through to the image). Mask is opaque (glass visible) outside [@padding-l, 100vw/@phi]
+    // and transparent (glass hidden) inside; full height since the gradient is horizontal.
+    // White (not black) for both alpha- and luminance-mode masks. Cut edges = hero @phi math.
+    @cut-l: @padding-l;
+    @cut-r: (100vw / @phi);
+    -webkit-mask: linear-gradient(to right, @white @cut-l, transparent @cut-l, transparent @cut-r, @white @cut-r);
+    mask:         linear-gradient(to right, @white @cut-l, transparent @cut-l, transparent @cut-r, @white @cut-r);
   }
 
   .section-fill__cols {
