@@ -133,36 +133,6 @@ nav.site-nav {
     font: @font-playfair;
     }
 }
-.glass-image {
-  position: relative;             // frame the absolute glass overlay sits in
-  width:100%;
-  height: auto;
-  max-height: 100vh-2.5*@padding-m;
-  overflow: hidden;               // clip the veil to the frame
-
-  // Smoke veil over the image. isolation:isolate confines the cutout's destination-out
-  // blend to THIS group so it erases the smoke only (revealing the image beneath) and
-  // does not punch through to layers below.
-  .glass{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: @smoke;
-    opacity:.14;
-    isolation: isolate;
-    // TODO: swap @smoke for a @glasstexture token (texture asset) once available.
-    .cutout{
-      padding: @padding-s @padding-m;
-      background-color: white;
-      mix-blend-mode: destination-out;
-      pointer-events: none;
-      display: inline-block;
-    }
-  }
-}
-
 // Reusable full-viewport section: fills viewport minus the fixed header and
 // snaps into place. One instance per "Sections" collection item (image + title + body).
 // Mirrors the .hero overlay grid + viewport math.
@@ -245,9 +215,39 @@ nav.site-nav {
 .section-fill--window {
   justify-content: center;                  // base anchors content bottom; window centers the columns
 
+  // Layer 0: base .section-fill__image stays absolute full-bleed (inherited, site.less base) — image spans whole section.
+
+  // Layer 1: smoke glass over the whole section. opacity<1 already groups this layer so the
+  // cutout's destination-out blend stays inside it (erases smoke only, NOT the image below);
+  // isolation:isolate makes that explicit.
+  .glass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: @smoke;
+    opacity: .14;
+    isolation: isolate;
+    z-index: 1;                              // above image, below content columns
+  }
+
+  // Cutout: carves a hole in the glass over the LEFT-column region, revealing the image beneath.
+  // Right edge at 100vw/@phi (mirrors hero @phi math); left edge at the @padding-l margin; full height.
+  .cutout {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: @padding-l;
+    width: (100vw / @phi) - @padding-l;
+    background-color: @white;
+    mix-blend-mode: destination-out;
+    pointer-events: none;
+  }
+
   .section-fill__cols {
-    position: relative;                      // lift the columns above the base absolute image
-    z-index: 1;
+    position: relative;                      // lift the columns above the image + glass layers
+    z-index: 2;
     display: flex;
     flex-direction: row;
     gap: @padding-l;                         // spacing between columns
@@ -255,23 +255,12 @@ nav.site-nav {
     padding-right: @padding-l;
     width: 100%;
     box-sizing: border-box;
-    align-items: stretch;
+    align-items: center;
   }
 
-  // Golden-ratio split (NOT equal): left col's right edge (the cutout edge) lands at 100vw/@phi.
-  // Subtract the @padding-l left margin so the edge is measured from the viewport, like hero's @phi math.
+  // Golden-ratio split (NOT equal): empty spacer matching the cutout, so the right col sits
+  // beside the revealed image. Right edge lands at 100vw/@phi, like the cutout.
   .section-fill__col--left { flex: none; width: (100vw / @phi) - @padding-l; min-width: 0; }
-
-  // Contain the image to the left column. Base .section-fill__image is absolute full-bleed
-  // (covers the whole section + hides the right column); in the window it must flow inside the
-  // glass frame instead. This rule is after the base, so it wins on source order + specificity.
-  .section-fill__col--left .section-fill__image {
-    position: static;
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
 
   .section-fill__col--right {
     flex: 1;                                 // takes the remaining width (golden-ratio remainder)

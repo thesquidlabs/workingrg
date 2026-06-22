@@ -1,14 +1,12 @@
 <!-- Section Fill variant: Window. Two-column layout. Dispatched from sections.list when sectionType=="window". -->
-<!-- Left: glass-image + cutout mask. Right: title/subtitle/body/link panes. Styles: site.less .section-fill--window -->
-<!-- Custom fields live under customContent; scope in to read. IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+<!-- Layer 0 image + layer 1 glass are section-wide; cutout (layer 2, left col) carves a hole in the glass to reveal the image. -->
+<!-- Right col: title/subtitle/body/link panes. Styles: site.less .section-fill--window. Custom fields under customContent; scope in to read. -->
+<!-- IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
 <section class="section-fill section-fill--window" data-section-fill>
+  {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
+  <div class="glass"><div class="cutout"></div></div>
   <div class="section-fill__cols">
-    <div class="section-fill__col section-fill__col--left">
-      <div class="glass-image">
-        {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
-        <div class="glass"><div class="cutout"></div></div>
-      </div>
-    </div>
+    <div class="section-fill__col section-fill__col--left"></div>
     <div class="section-fill__col section-fill__col--right">
       <h2 class="section-fill__title">{title}</h2>
       {.section customContent}{.section subtitle}<p class="section-fill__subtitle">{@}</p>{.end}{.end}
