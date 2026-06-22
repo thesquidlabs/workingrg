@@ -1,11 +1,15 @@
 <!-- Sections collection list view. Each item = one full-viewport scroll-snap section. -->
 <!-- Structure lives once in blocks/section-fill.block; applied per item (the "class"). -->
 {.repeated section items}
-  {.var @secType customContent.sectionType}
-  {.equal? @secType window}
-    {@|apply window.block}
+  {.var @item @}
+  {.section customContent}
+    {.equal? sectionType window}
+      {@item|apply window.block}
+    {.or}
+      {@item|apply section-fill.block}
+    {.end}
   {.or}
-    {@|apply section-fill.block}
+    {@item|apply section-fill.block}
   {.end}
 {.or}
   No sections yet.
