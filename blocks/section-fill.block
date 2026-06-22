@@ -10,6 +10,7 @@
   {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
   <div class="section-fill__content">
     <h2 class="section-fill__title">{title}</h2>
+    {.subtitle?}<p class="section-fill__subtitle">{subtitle}</p>{.end}
     {body}
   </div>
 </section>
