@@ -10,7 +10,7 @@
   {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
   <div class="section-fill__content">
     {.equal? title ""}{.or}<h2 class="section-fill__title">{title}</h2>{.end}
-    {.section customContent}{.section subtitle}<p class="section-fill__subtitle">{@}</p>{.end}{.end}
-    {body}
+    {.section customContent}{.equal? subtitle ""}{.or}<p class="section-fill__subtitle">{subtitle}</p>{.end}{.end}
+    {.equal? body ""}{.or}{body}{.end}
   </div>
 </section>
