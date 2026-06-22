@@ -1,0 +1,24 @@
+<!-- Showcase Window variant. Dispatched from sections.list when sectionType=="showcase". -->
+<!-- Cards stacked absolute (one per Showcase collection item); JS (data-showcase, scripts/site.js) -->
+<!-- swaps the active card on scroll and pins the section until the list is exhausted, then releases -->
+<!-- to native scroll-snap. Each card mirrors window.block layout (image + glass + cols); only the -->
+<!-- subtitle (item title) and link ("More Details" -> linkUrl) panes are populated. Styles inherited -->
+<!-- from .section-fill--window plus .section-fill--showcase in site.less. -->
+<!-- IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+<section class="section-fill section-fill--window section-fill--showcase" data-section-fill data-showcase>
+  <squarespace:query collection="showcase">
+    {.repeated section items}
+      <div class="section-fill__card" data-showcase-card>
+        {.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}
+        <div class="glass"></div>
+        <div class="section-fill__cols">
+          <div class="section-fill__col section-fill__col--left"></div>
+          <div class="section-fill__col section-fill__col--right">
+            {.equal? title ""}{.or}<p class="section-fill__subtitle">{title}</p>{.end}
+            {.section customContent}{.equal? linkUrl ""}{.or}<a class="section-fill__link" href="{linkUrl}">More Details</a>{.end}{.end}
+          </div>
+        </div>
+      </div>
+    {.end}
+  </squarespace:query>
+</section>

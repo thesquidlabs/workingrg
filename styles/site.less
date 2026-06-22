@@ -330,6 +330,33 @@ nav.site-nav {
   }
 }
 
+// Section variant: Showcase Window. Dispatched via blocks/showcase-window.block (sectionType=="showcase").
+// Carries .section-fill--window too, so glass/cols/subtitle/link styles are inherited unchanged. This
+// modifier only stacks the per-card window layouts and toggles which one is visible; the JS pin
+// controller (scripts/site.js, data-showcase) advances .is-active on scroll. One scroll-snap stop is
+// kept (inherited base) - the cards swap in place rather than each being its own snap section.
+@showcase-fade: 0.5s;   // card cross-fade duration (named, not magic)
+
+.section-fill--showcase {
+
+  // Each card fills the section and stacks on its siblings; only the active card shows.
+  .section-fill__card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity @showcase-fade ease;
+  }
+
+  .section-fill__card.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 // .about-card {
 //     font-size: ;
 //     color: ;

@@ -8,11 +8,13 @@
 {.repeated section items}
   {.var @item @}
   {.section customContent}
-    {.equal? sectionType "window"}
+    {.equal? sectionType "showcase"}
+      {@item|apply showcase-window.block}
+    {.or}{.equal? sectionType "window"}
       {@item|apply window.block}
     {.or}
       {@item|apply section-fill.block}
-    {.end}
+    {.end}{.end}
   {.or}
     {@item|apply section-fill.block}
   {.end}
