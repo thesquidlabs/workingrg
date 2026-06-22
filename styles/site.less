@@ -217,9 +217,8 @@ nav.site-nav {
 
   // Layer 0: base .section-fill__image stays absolute full-bleed (inherited, site.less base) — image spans whole section.
 
-  // Layer 1: smoke glass over the whole section. opacity<1 already groups this layer so the
-  // cutout's destination-out blend stays inside it (erases smoke only, NOT the image below);
-  // isolation:isolate makes that explicit.
+  // Layer 1: smoke glass (+ backdrop blur) over the whole section, masked to leave a window
+  // over the left column. Mask clips only this element, so the image layer below stays intact.
   .glass {
     position: absolute;
     top: 0;
@@ -233,13 +232,24 @@ nav.site-nav {
 
     // Knock a rectangular window in the smoke over the LEFT column so the image shows through.
     // A mask affects ONLY this element, so the sibling image below is untouched (a blend knockout
-    // bled through to the image). Mask is opaque (glass visible) outside [@padding-l, 100vw/@phi]
-    // and transparent (glass hidden) inside; full height since the gradient is horizontal.
-    // White (not black) for both alpha- and luminance-mode masks. Cut edges = hero @phi math.
+    // bled through to the image). The rect hole = everything EXCEPT four opaque edge strips
+    // (left/right/top/bottom). Multiple mask layers default-composite as ADD (union), so the four
+    // strips union to "all glass except the central rect". White (not black) for both alpha- and
+    // luminance-mode masks. Left/right edges = hero @phi math; top/bottom inset by @padding-m.
     @cut-l: @padding-l;
     @cut-r: (100vw / @phi);
-    -webkit-mask: linear-gradient(to right, @white @cut-l, transparent @cut-l, transparent @cut-r, @white @cut-r);
-    mask:         linear-gradient(to right, @white @cut-l, transparent @cut-l, transparent @cut-r, @white @cut-r);
+    @cut-t: @padding-m;
+    @cut-b: ~"calc(100% - @{padding-m})";
+    -webkit-mask:
+      linear-gradient(to right,  @white @cut-l, transparent @cut-l),    // left strip
+      linear-gradient(to right,  transparent @cut-r, @white @cut-r),    // right strip
+      linear-gradient(to bottom, @white @cut-t, transparent @cut-t),    // top strip
+      linear-gradient(to bottom, transparent @cut-b, @white @cut-b);    // bottom strip
+    mask:
+      linear-gradient(to right,  @white @cut-l, transparent @cut-l),
+      linear-gradient(to right,  transparent @cut-r, @white @cut-r),
+      linear-gradient(to bottom, @white @cut-t, transparent @cut-t),
+      linear-gradient(to bottom, transparent @cut-b, @white @cut-b);
   }
 
   .section-fill__cols {
