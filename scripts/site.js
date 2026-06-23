@@ -21,6 +21,7 @@ function initShowcase(section) {
     return;
   }
 
+  var dots = section.querySelectorAll('.section-fill__dot');   // progress indicator, one per card
   var index = 0;
   var cooldownMs = 450;        // minimum time between card steps (throttle)
   var lastStep = 0;            // timestamp of the last step
@@ -59,6 +60,14 @@ function initShowcase(section) {
         cards[i].classList.add('is-below');
       } else {
         cards[i].classList.add('is-active');
+      }
+    }
+    // Keep the progress indicator in sync - exactly one dot active.
+    for (var d = 0; d < dots.length; d++) {
+      if (d === next) {
+        dots[d].classList.add('is-active');
+      } else {
+        dots[d].classList.remove('is-active');
       }
     }
     index = next;

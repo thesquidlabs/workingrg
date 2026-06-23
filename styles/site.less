@@ -375,6 +375,33 @@ nav.site-nav {
   &.is-ready .section-fill__card { top: 100%; }            // upcoming (below)
   &.is-ready .section-fill__card.is-above { top: -100%; }  // already-seen (above)
   &.is-ready .section-fill__card.is-active { top: 0; }
+
+  // Persistent progress indicator: one circle per card, far right, vertically centred. Section-level
+  // (sibling of .glass) so it never scrolls. z-index above glass(1) + cols(2). Active circle = @white.
+  .section-fill__dots {
+    position: absolute;
+    right: @padding-s;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: @padding-xs;
+  }
+
+  .section-fill__dot {
+    width: @padding-s;
+    height: @padding-s;
+    border-radius: 50%;
+    background-color: @smoke;
+    transition: background-color @showcase-slide ease;
+  }
+
+  // Pre-seat the first dot (before JS), mirroring the card :first-child seat. Once .is-ready is set the
+  // is-active class is the single source of truth, so only one dot is ever white.
+  .section-fill__dot:first-child { background-color: @white; }
+  &.is-ready .section-fill__dot { background-color: @smoke; }
+  &.is-ready .section-fill__dot.is-active { background-color: @white; }
 }
 
 // .about-card {

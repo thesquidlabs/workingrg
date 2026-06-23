@@ -14,6 +14,11 @@
           {.repeated section items}
             {@|apply showcase-card.block}
           {.end}
+          <div class="section-fill__dots">
+            {.repeated section items}
+              <span class="section-fill__dot"></span>
+            {.end}
+          </div>
         </squarespace:query>
         <div class="glass"></div>
       </section>
