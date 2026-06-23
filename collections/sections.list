@@ -15,6 +15,7 @@
             {@|apply showcase-card.block}
           {.end}
         </squarespace:query>
+        <div class="glass"></div>
       </section>
     {.or}{.equal? sectionType "window"}
       {@item|apply window.block}

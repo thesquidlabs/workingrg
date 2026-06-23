@@ -342,33 +342,39 @@ nav.site-nav {
   // sections (cards park one viewport away, above or below, depending on direction).
   overflow: hidden;
 
-  // Each card fills the section and stacks on its siblings, carrying both the background image and the
-  // right-column content as it slides. The card (not the section) hosts the cols, so it must reproduce
-  // the section's vertical centering (.section-fill--window justify-content:center).
+  // Each card fills the section and slides as a unit, carrying both the background image and the
+  // right-column content. The card hosts the cols, so it reproduces the section's vertical centering
+  // (.section-fill--window justify-content:center).
+  //
+  // Slide via `top`, NOT `transform`: a transform would make each card its own stacking context,
+  // trapping its image + cols together. With plain positioning (z-index:auto) the card creates NO
+  // stacking context, so the section-level .glass (z-index:1) layers BETWEEN the card images
+  // (z-index:auto) and the card cols (z-index:2) - keeping the window mask fixed while content slides.
   .section-fill__card {
     position: absolute;
-    top: 0;
+    top: 100%;                                // default: parked below (upcoming card)
     left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transform: translateY(100%);              // default: parked below (upcoming card)
-    transition: transform @showcase-slide ease;
+    transition: top @showcase-slide ease;
   }
 
   // Pre-seat the first card at load, before the JS controller runs, so the section isn't empty.
   // Matches the JS is-active position, so toggling .is-ready below moves nothing (no entrance anim).
-  .section-fill__card:first-child { transform: translateY(0); }
+  .section-fill__card:first-child { top: 0; }
 
   // Directional states, applied by the JS controller (scripts/site.js) once .is-ready is set. A card's
   // park side is its index relative to the active one: already-seen cards park ABOVE (enter/exit via the
   // top), upcoming cards park BELOW (via the bottom). So a forward step rises from the bottom and the
   // outgoing card exits the top; a backward step drops from the top and the outgoing exits the bottom.
-  &.is-ready .section-fill__card { transform: translateY(100%); }            // upcoming (below)
-  &.is-ready .section-fill__card.is-above { transform: translateY(-100%); }  // already-seen (above)
-  &.is-ready .section-fill__card.is-active { transform: translateY(0); z-index: 3; }
+  // No z-index on the active card - it must stay z-index:auto so the fixed section glass keeps layering
+  // between its image and cols; overlap order during a step falls to DOM order.
+  &.is-ready .section-fill__card { top: 100%; }            // upcoming (below)
+  &.is-ready .section-fill__card.is-above { top: -100%; }  // already-seen (above)
+  &.is-ready .section-fill__card.is-active { top: 0; }
 }
 
 // .about-card {
