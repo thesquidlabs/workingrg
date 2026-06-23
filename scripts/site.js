@@ -22,9 +22,8 @@ function initShowcase(section) {
   }
 
   var index = 0;
-  var cooldownMs = 450;        // quiet gap after scrolling stops before the next step is allowed
-  var locked = false;
-  var unlockTimer = null;
+  var cooldownMs = 450;        // minimum time between card steps (throttle)
+  var lastStep = 0;            // timestamp of the last step
   var engaged = false;         // section is the one in view (set by IntersectionObserver)
   var touchStartY = null;
   var touchThreshold = 40;     // px of vertical drag before a swap registers
@@ -46,20 +45,21 @@ function initShowcase(section) {
 
   // Shared step logic for wheel + touch. dir: +1 down, -1 up. Returns true if the gesture was
   // consumed (caller should preventDefault); false to release to native scroll-snap.
-  // Momentum-safe: every consumed event re-arms the unlock timer, so one continuous gesture
-  // (with trailing inertia) advances exactly one card - it can't expire mid-flick and double-step.
+  // Time-throttle, not a hold-lock: while engaged on a middle card the gesture is always pinned,
+  // but a step fires at most once per cooldownMs. Continuous scroll advances steadily; a single
+  // flick advances one card. Critically it can never freeze - there is no lock that a non-stop
+  // wheel stream could keep re-arming forever.
   function handle(dir) {
     if (!engaged) { return false; }
     var atBoundary = (dir > 0 && index === cards.length - 1) ||
                      (dir < 0 && index === 0);
     if (atBoundary) { return false; }          // let native snap move to the next/prev section
-    if (!locked) {
+    var now = Date.now();
+    if (now - lastStep >= cooldownMs) {
       setActive(index + dir);
-      locked = true;
+      lastStep = now;
     }
-    if (unlockTimer) { clearTimeout(unlockTimer); }
-    unlockTimer = setTimeout(function () { locked = false; }, cooldownMs);
-    return true;                               // pinned: consume the gesture
+    return true;                               // pinned: consume the gesture (step or throttled)
   }
 
   window.addEventListener('wheel', function (e) {
