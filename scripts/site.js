@@ -28,8 +28,6 @@ function initShowcase(section) {
   var touchStartY = null;
   var touchThreshold = 40;     // px of vertical drag before a swap registers
 
-  cards[0].classList.add('is-active');
-
   // Engage only when the section substantially fills the viewport. Listening on window (not the
   // section) + this ratio gate means a fast scroll still catches the section instead of flying past.
   var io = new IntersectionObserver(function (entries) {
@@ -37,11 +35,28 @@ function initShowcase(section) {
   }, { threshold: [0, 0.6, 1] });
   io.observe(section);
 
+  // Set each card's state by its index relative to the new active one: earlier cards park ABOVE,
+  // later cards park BELOW, active sits centred. This makes the slide directional without tracking
+  // the scroll direction - a forward step naturally rises from the bottom, a backward step from the top.
   function setActive(next) {
-    cards[index].classList.remove('is-active');
-    cards[next].classList.add('is-active');
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.remove('is-active', 'is-above', 'is-below');
+      if (i < next) {
+        cards[i].classList.add('is-above');
+      } else if (i > next) {
+        cards[i].classList.add('is-below');
+      } else {
+        cards[i].classList.add('is-active');
+      }
+    }
     index = next;
   }
+
+  // Seat the initial states, then flip on .is-ready. Card 0 is already at translateY(0) via CSS
+  // :first-child and the rest at translateY(100%), so enabling .is-ready moves nothing - the first
+  // card is pre-seated with no entrance animation; only later scroll steps animate.
+  setActive(0);
+  section.classList.add('is-ready');
 
   // Shared step logic for wheel + touch. dir: +1 down, -1 up. Returns true if the gesture was
   // consumed (caller should preventDefault); false to release to native scroll-snap.

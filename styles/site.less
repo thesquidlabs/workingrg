@@ -330,18 +330,21 @@ nav.site-nav {
   }
 }
 
-// Section variant: Showcase Window. Dispatched via blocks/showcase-window.block (sectionType=="showcase").
-// Carries .section-fill--window too, so glass/cols/subtitle/link styles are inherited unchanged. This
-// modifier only stacks the per-card window layouts and toggles which one is visible; the JS pin
-// controller (scripts/site.js, data-showcase) advances .is-active on scroll. One scroll-snap stop is
-// kept (inherited base) - the cards swap in place rather than each being its own snap section.
-@showcase-fade: 0.5s;   // card cross-fade duration (named, not magic)
+// Section variant: Showcase Window. Dispatched via collections/sections.list (sectionType=="showcase"),
+// cards from blocks/showcase-card.block. Carries .section-fill--window too, so glass/cols/subtitle/link
+// styles are inherited unchanged. This modifier stacks the per-card window layouts and slides the active
+// one up into place; the JS pin controller (scripts/site.js, data-showcase) toggles .is-active on scroll.
+// One scroll-snap stop is kept (inherited base) - the cards swap in place, not as separate snap sections.
+@showcase-slide: 0.6s;   // card scroll-in duration (named, not magic)
 
 .section-fill--showcase {
+  // Clip parked/outgoing cards so the slide reads as a scroll-in, not cards peeking into neighbouring
+  // sections (cards park one viewport away, above or below, depending on direction).
+  overflow: hidden;
 
-  // Each card fills the section and stacks on its siblings; only the active card shows.
-  // The card (not the section) now hosts the cols, so it must reproduce the section's vertical
-  // centering (.section-fill--window justify-content:center) - otherwise cols pin to the card top.
+  // Each card fills the section and stacks on its siblings, carrying both the background image and the
+  // right-column content as it slides. The card (not the section) hosts the cols, so it must reproduce
+  // the section's vertical centering (.section-fill--window justify-content:center).
   .section-fill__card {
     position: absolute;
     top: 0;
@@ -351,15 +354,21 @@ nav.site-nav {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity @showcase-fade ease;
+    transform: translateY(100%);              // default: parked below (upcoming card)
+    transition: transform @showcase-slide ease;
   }
 
-  .section-fill__card.is-active {
-    opacity: 1;
-    visibility: visible;
-  }
+  // Pre-seat the first card at load, before the JS controller runs, so the section isn't empty.
+  // Matches the JS is-active position, so toggling .is-ready below moves nothing (no entrance anim).
+  .section-fill__card:first-child { transform: translateY(0); }
+
+  // Directional states, applied by the JS controller (scripts/site.js) once .is-ready is set. A card's
+  // park side is its index relative to the active one: already-seen cards park ABOVE (enter/exit via the
+  // top), upcoming cards park BELOW (via the bottom). So a forward step rises from the bottom and the
+  // outgoing card exits the top; a backward step drops from the top and the outgoing exits the bottom.
+  &.is-ready .section-fill__card { transform: translateY(100%); }            // upcoming (below)
+  &.is-ready .section-fill__card.is-above { transform: translateY(-100%); }  // already-seen (above)
+  &.is-ready .section-fill__card.is-active { transform: translateY(0); z-index: 3; }
 }
 
 // .about-card {
