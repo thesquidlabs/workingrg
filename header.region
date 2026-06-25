@@ -10,7 +10,7 @@ Owns the document open: doctype + head (squarespace-headers tag) + opening body.
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:wght@400;700|Lato:wght@400;700" rel="stylesheet">
 
     {squarespace-headers}
-    <squarespace:script src="site.js" combo="true" />
+    <squarespace:script data-preserve-html-node="true" src="site.js" combo="false"/>
 
   </head>
   <body id="{squarespace.page-id}" class="{squarespace.page-classes}">
