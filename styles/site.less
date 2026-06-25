@@ -97,7 +97,10 @@ nav.site-nav {
   & > * + * {
         margin-left: @padding-gap;
     }
-} 
+  & > *:first-child {
+        margin-left: @padding-gap;   // min gap from logo for leftmost link
+    }
+}
 .subheading {
   width: 100%;
   height:auto;
