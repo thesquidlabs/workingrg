@@ -319,16 +319,17 @@ nav.site-nav {
     padding: @padding-s;
     text-decoration: none;
     // Border-triangle: pseudo-element points right, replacing the banner's right edge.
+    // Span full banner height (top:0/bottom:0) so the point height tracks the rectangle
+    // exactly - no half-height guess. Apex formed by clip-path, not border math.
     &::after {
       content: "";
       position: absolute;
       top: 0;
+      bottom: 0;                                                 // bound to banner height
       left: 100%;
-      width: 0;
-      height: 0;
-      border-top: (@padding-s + 0.875rem) solid transparent;     // ~half banner height each
-      border-bottom: (@padding-s + 0.875rem) solid transparent;
-      border-left: @padding-s solid @red;                        // point extends right
+      width: @padding-s;                                         // point depth = banner padding
+      background-color: @red;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);                 // right-pointing apex at mid-height
     }
   }
 }
