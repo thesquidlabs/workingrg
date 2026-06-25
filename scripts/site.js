@@ -1,11 +1,7 @@
 
-// Use the sqs-core module to access core Squarespace
-// functionality, like Lifecycle and ImageLoader. For
-// full documentation, go to:
-//
-// http://github.com/squarespace/squarespace-core
-
-var core = require('@squarespace/core');
+// Plain browser script - NO require()/module imports. Squarespace serves /scripts files as-is, so
+// a bare `require` throws "require is not defined" and kills the whole file. ImageLoader is a
+// Squarespace runtime global (window.ImageLoader), used directly and guarded below - never bundled.
 
 // Showcase Window pin controller.
 // A [data-showcase] section stacks N absolutely-positioned [data-showcase-card] panes; only the
@@ -131,10 +127,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
   var images = document.querySelectorAll('img[data-src]');
 
-  for (var i = 0; i < images.length; i++) {
-    core.ImageLoader.load(images[i], {
-      load: true
-    });
+  if (window.ImageLoader) {
+    for (var i = 0; i < images.length; i++) {
+      window.ImageLoader.load(images[i], {
+        load: true
+      });
+    }
   }
 
   var showcases = document.querySelectorAll('[data-showcase]');
