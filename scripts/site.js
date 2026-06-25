@@ -123,17 +123,24 @@ function initShowcase(section) {
   }, { passive: true });
 }
 
+// Force-load every responsive (data-src) image up front. Run on load AND resize: the
+// initial pass alone misses reflow-triggered container-size changes, and showcase cards
+// rely on container size for ImageLoader's responsive resolution. Loading at page load
+// (not on scroll) keeps the showcase fully painted before it's reached, so a normal
+// scroll pins it instead of skipping it as the images populate late.
+function loadAllImages() {
+  if (!window.ImageLoader) { return; }
+  var images = document.querySelectorAll('img[data-src]');
+  for (var i = 0; i < images.length; i++) {
+    window.ImageLoader.load(images[i], {
+      load: true
+    });
+  }
+}
+
 window.addEventListener('DOMContentLoaded', function() {
 
-  var images = document.querySelectorAll('img[data-src]');
-
-  if (window.ImageLoader) {
-    for (var i = 0; i < images.length; i++) {
-      window.ImageLoader.load(images[i], {
-        load: true
-      });
-    }
-  }
+  loadAllImages();
 
   var showcases = document.querySelectorAll('[data-showcase]');
 
@@ -142,3 +149,5 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
+window.addEventListener('resize', loadAllImages);
