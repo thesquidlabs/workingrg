@@ -123,6 +123,59 @@ function initShowcase(section) {
   }, { passive: true });
 }
 
+// Gallery carousel controller.
+// A [data-gallery] section shows a fixed window of three [data-gallery-card]s in a clipped
+// [data-gallery-track]; the chevrons ([data-gallery-prev|next]) slide the track one card per click
+// (no scroll hijack - unlike the showcase). The dots ([data-gallery-dot], one per card) highlight the
+// leftmost visible card. Horizontal sibling of initShowcase; styles in site.less .section-fill--gallery.
+function initGallery(section) {
+  var track = section.querySelector('[data-gallery-track]');
+  if (!track) { return; }                                // empty/unlinked gallery: nothing to drive
+  var cards = section.querySelectorAll('[data-gallery-card]');
+  var dots = section.querySelectorAll('[data-gallery-dot]');
+  var prev = section.querySelector('[data-gallery-prev]');
+  var next = section.querySelector('[data-gallery-next]');
+
+  var visible = 3;             // cards shown at once (matches the site.less third-width card)
+  var index = 0;              // leftmost visible card
+
+  // Furthest the window can slide: last full window of three sits flush at the end.
+  function maxIndex() { return Math.max(0, cards.length - visible); }
+
+  // One card's left-edge advance = card width + gap. Measured from the first two cards so it tracks the
+  // vw-based widths/gaps at any viewport size (recomputed on resize). Single card: just its width.
+  function step() {
+    if (cards.length < 2) { return cards.length ? cards[0].getBoundingClientRect().width : 0; }
+    return cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+  }
+
+  function update() {
+    track.style.transform = 'translateX(' + (-index * step()) + 'px)';
+    for (var d = 0; d < dots.length; d++) {
+      if (d === index) { dots[d].classList.add('is-active'); }
+      else { dots[d].classList.remove('is-active'); }
+    }
+    if (prev) { prev.disabled = (index === 0); }         // disable at the bounds
+    if (next) { next.disabled = (index >= maxIndex()); }
+  }
+
+  if (prev) {
+    prev.addEventListener('click', function () {
+      if (index > 0) { index--; update(); }
+    });
+  }
+  if (next) {
+    next.addEventListener('click', function () {
+      if (index < maxIndex()) { index++; update(); }
+    });
+  }
+
+  // Recompute on resize - step() depends on the vw-based card width. visible is fixed, so index stays valid.
+  window.addEventListener('resize', update);
+
+  update();                                              // seat dot 0 + chevron disabled states
+}
+
 // Force-load every responsive (data-src) image up front. Run on load AND resize: the
 // initial pass alone misses reflow-triggered container-size changes, and showcase cards
 // rely on container size for ImageLoader's responsive resolution. Loading at page load
@@ -146,6 +199,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
   for (var j = 0; j < showcases.length; j++) {
     initShowcase(showcases[j]);
+  }
+
+  var galleries = document.querySelectorAll('[data-gallery]');
+
+  for (var g = 0; g < galleries.length; g++) {
+    initGallery(galleries[g]);
   }
 
 });

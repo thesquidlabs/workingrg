@@ -7,8 +7,43 @@
 <!-- each applied block keeps item scope (applying at customContent scope loses title/body/image). -->
 {.repeated section items}
   {.var @item @}
+  {.var @secTitle title}
   {.section customContent}
-    {.equal? sectionType "showcase"}
+    {.equal? sectionType "gallery"}
+      <!-- Horizontal gallery: title bar + full-bleed section image + 3-up card strip with chevrons + dots. -->
+      <!-- Cards come from the collection whose slug the editor typed into galleryCollection (interpolated -->
+      <!-- into the query - no per-gallery code). Background + bar text are the SECTION item's own image/title, -->
+      <!-- read via @item because the query below re-scopes to the queried card collection. JS: data-gallery. -->
+      {.var @gallerySlug galleryCollection}
+      <section class="section-fill section-fill--gallery" data-section-fill data-gallery>
+        {.section @item}{.main-image?}<img class="section-fill__image" {@|image-meta} alt="{title}" />{.end}{.end}
+        <div class="section-fill__bar">{@secTitle}</div>
+        <div class="gallery__stage">
+          <button class="gallery__chevron gallery__chevron--prev" data-gallery-prev aria-label="Previous" disabled></button>
+          <div class="gallery__viewport">
+            <div class="gallery__track" data-gallery-track>
+              {.equal? galleryCollection ""}{.or}
+                <squarespace:query collection="{@gallerySlug}">
+                  {.repeated section items}
+                    {@|apply gallery-card.block}
+                  {.end}
+                </squarespace:query>
+              {.end}
+            </div>
+          </div>
+          <button class="gallery__chevron gallery__chevron--next" data-gallery-next aria-label="Next"></button>
+        </div>
+        <div class="gallery__dots" data-gallery-dots>
+          {.equal? galleryCollection ""}{.or}
+            <squarespace:query collection="{@gallerySlug}">
+              {.repeated section items}
+                <span class="gallery__dot" data-gallery-dot></span>
+              {.end}
+            </squarespace:query>
+          {.end}
+        </div>
+      </section>
+    {.or}{.equal? sectionType "showcase"}
       <section class="section-fill section-fill--window section-fill--showcase" data-section-fill data-showcase>
         <squarespace:query collection="showcase">
           {.repeated section items}

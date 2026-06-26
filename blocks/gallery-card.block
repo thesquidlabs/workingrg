@@ -1,0 +1,27 @@
+<!-- Gallery card: one Showcase-Gallery-collection item rendered as a boxed white card. -->
+<!-- Applied per item from the <squarespace:query> loop in collections/sections.list (sectionType=="gallery"). -->
+<!-- squarespace: tags must live in the .list, NOT in a .block - this file is pure markup applied at the -->
+<!-- query item's scope (base image/text item: image + title + body). -->
+<!-- Three content states, each its own modifier (styles in site.less .section-fill--gallery): -->
+<!--   --full  = image + text (title and/or body)   --image = image only   --text = title/body, no image -->
+<!-- Variant picks the OPEN tag below; the inner image/title/body are shared and self-gated. -->
+<!-- title?: {.field?} is truthy on "" (skip-blank via {.equal? title ""}); body uses {.if body} (empty = false). -->
+<!-- JS hook: data-gallery-card (carousel measures its width). -->
+<!-- IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+{.main-image?}
+  {.equal? title ""}
+    {.if body}
+      <div class="gallery-card gallery-card--full" data-gallery-card>
+    {.or}
+      <div class="gallery-card gallery-card--image" data-gallery-card>
+    {.end}
+  {.or}
+    <div class="gallery-card gallery-card--full" data-gallery-card>
+  {.end}
+{.or}
+  <div class="gallery-card gallery-card--text" data-gallery-card>
+{.end}
+  {.main-image?}<img class="gallery-card__image" {@|image-meta} alt="{title}" />{.end}
+  {.equal? title ""}{.or}<h3 class="gallery-card__title">{title}</h3>{.end}
+  {.if body}<div class="gallery-card__body">{body}</div>{.end}
+</div>

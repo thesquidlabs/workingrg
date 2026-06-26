@@ -1,0 +1,13 @@
+<!-- Showcase Gallery collection list view. The homepage carousel does NOT render through this -->
+<!-- file - it queries this collection from collections/sections.list (sectionType=="gallery") and -->
+<!-- applies blocks/gallery-card.block per item. This .list exists only so the collection is a valid, -->
+<!-- non-broken standalone page. squarespace: tags must NOT live in a .block, so the carousel query -->
+<!-- stays in sections.list; here we simply lay the same cards out in a plain stack. -->
+<!-- IMPORTANT: never put JSON-T tags in comments - they evaluate. -->
+<div class="showcasegallery-list">
+  {.repeated section items}
+    {@|apply gallery-card.block}
+  {.or}
+    No items yet.
+  {.end}
+</div>

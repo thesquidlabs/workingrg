@@ -408,6 +408,157 @@ nav.site-nav {
   &.is-ready .section-fill__dot.is-active { background-color: @white; }
 }
 
+// Section variant: Gallery. Horizontal sibling of Showcase, dispatched via collections/sections.list
+// (sectionType=="gallery"); cards from blocks/gallery-card.block, queried from the editor-linked
+// collection. NOT scroll-hijacked - on-screen chevrons step a three-card window (scripts/site.js,
+// data-gallery). Stacks vertically inside the full-viewport section: navy title bar, then the card
+// stage (chevrons + clipped track), then the horizontal dot indicator.
+@gallery-slide: 0.4s;   // track slide + dot fade duration (named, not magic)
+
+.section-fill--gallery {
+  // Inherits .section-fill (full viewport, navy fallback, absolute full-bleed .section-fill__image).
+  // Re-flow top-to-bottom instead of the base bottom-anchored content.
+  justify-content: flex-start;
+  overflow: hidden;
+
+  // Full-width navy title bar across the top. Height @padding-l, white centred Playfair 2.5rem,
+  // bold red rule on the bottom edge (the .rule-bold look, via the .rule mixin like the subtitle).
+  .section-fill__bar {
+    position: relative;
+    z-index: 2;                              // above the absolute background image
+    width: 100%;
+    height: @padding-l;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: @navy;
+    color: @white;
+    .text-style(@font-playfair, 2.5rem, false);
+    &::after {                               // bold red rule pinned to the bar's bottom edge
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      .rule(5px, @red);
+    }
+  }
+
+  // Card stage: chevrons flank the clipped viewport. Fills the gap between bar and dots, centred.
+  .gallery__stage {
+    position: relative;
+    z-index: 2;                              // above background image
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 @padding-l;                   // enclosing left/right margins (match window variant)
+  }
+
+  // Viewport clips the overflowing track; only the three-card window shows.
+  .gallery__viewport {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  // Track holds every card in a row; JS translateX slides it one card per chevron click.
+  .gallery__track {
+    display: flex;
+    flex-direction: row;
+    gap: @padding-gap;
+    transition: transform @gallery-slide ease;
+  }
+
+  // Each card = one third of the viewport minus the two inter-card gaps, so exactly three show
+  // (3 cards, 2 gaps - structural). calc() escapes legacy LESS math; @{padding-gap} interpolates the token.
+  .gallery-card {
+    flex: 0 0 ~"calc((100% - 2 * @{padding-gap}) / 3)";
+    box-sizing: border-box;
+    background-color: @white;
+    padding: @padding-s;
+    box-shadow: 0 2px 8px fade(@navy, 20%);  // subtle lift off the background image
+    display: flex;
+    flex-direction: column;
+    gap: @padding-s;
+  }
+
+  .gallery-card__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  // Card title: Playfair navy, red rule beneath (mirrors the subtitle treatment).
+  .gallery-card__title {
+    .text-style(@font-playfair, 1.875rem, false);
+    color: @navy;
+    &::after { content: ""; .rule(3px, @red); margin-top: @padding-xs; }
+  }
+
+  .gallery-card__body {
+    .text-style(@font-lato, 1.25rem, false);
+    color: @navy;
+  }
+
+  // Text-only card: no image, centre the title/body block.
+  .gallery-card--text {
+    justify-content: center;
+    text-align: center;
+  }
+
+  // Image-only card: image fills the padded box.
+  .gallery-card--image .gallery-card__image { height: 100%; }
+
+  // Chevron controls: paired smoke arrow marks, @padding-s square, with horizontal spacer padding,
+  // vertically centred (flex on the stage). Built from two rotated borders (no asset); --prev/--next
+  // mirror via the rotation.
+  .gallery__chevron {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 @padding-s;                   // spacer padding left/right
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &::before {
+      content: "";
+      display: block;
+      width: @padding-s;
+      height: @padding-s;
+      border-top: 3px solid @smoke;
+      border-right: 3px solid @smoke;
+    }
+  }
+  .gallery__chevron--next::before { transform: rotate(45deg); }    // points right
+  .gallery__chevron--prev::before { transform: rotate(-135deg); }  // points left (mirrored)
+  .gallery__chevron[disabled] { cursor: default; pointer-events: none; }
+  .gallery__chevron[disabled]::before { border-color: @silver; }   // dimmed at the bound
+
+  // Horizontal progress indicator along the bottom: one circle per card, leftmost-visible = @white.
+  .gallery__dots {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: @padding-gap;
+    padding: @padding-s 0;
+  }
+  .gallery__dot {
+    width: @padding-s;
+    height: @padding-s;
+    border-radius: 50%;
+    background-color: @silver;
+    transition: background-color @gallery-slide ease;
+  }
+  .gallery__dot.is-active { background-color: @white; }
+}
+
 // .about-card {
 //     font-size: ;
 //     color: ;
@@ -460,8 +611,6 @@ nav.site-nav .nav-link.current {
 
 
 /* TODO: Implement
-  {Chevron}:20/9vw Arrow mark, paired, rotated as needed, in Smoke. Spacer padding on left/right, vertically aligned with gallery. 
-  
   {Title Banner} Full-width navy bar, centered white Playfair Display text at 30pt, Bold red rule on the bottom edge .
   {Call-to-Action Button} Red rectangle with a right-pointing arrow from its right end; Lato fullcaps white label.
   */
