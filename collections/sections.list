@@ -25,7 +25,7 @@
               {.equal? galleryCollection ""}{.or}
                 <squarespace:query collection="{@gallerySlug}">
                   {.repeated section items}
-                    {@|apply gallery-card.block}
+                    <div class="gallery-card gallery-card--text" data-gallery-card>PROBE t=[{title}] b=[{body}] img=[{.main-image?}Y{.or}N{.end}]</div>
                   {.end}
                 </squarespace:query>
               {.end}
@@ -61,7 +61,7 @@
       {@item|apply window.block}
     {.or}
       {@item|apply section-fill.block}
-    {.end}{.end}
+    {.end}{.end}{.end}
   {.or}
     {@item|apply section-fill.block}
   {.end}
