@@ -455,7 +455,7 @@ nav.site-nav {
     width: 100%;
     box-sizing: border-box;
     min-height: 0;                           // let tall cards clip, not grow the fixed-height stage
-    padding: 0 @padding-l;                   // enclosing left/right margins (match window variant)
+    padding: @padding-m @padding-l 0;        // @padding-m gap below the bar; @padding-l side margins
   }
 
   // Viewport clips the overflowing track; only the three-card window shows.
@@ -563,6 +563,7 @@ nav.site-nav {
     height: @padding-s;
     border-radius: 50%;
     background-color: @silver;
+    cursor: pointer;                         // clickable: jumps the window (initGallery)
     transition: background-color @gallery-slide ease;
   }
   .gallery__dot.is-active { background-color: @white; }

@@ -127,7 +127,8 @@ function initShowcase(section) {
 // A [data-gallery] section shows a fixed window of three [data-gallery-card]s in a clipped
 // [data-gallery-track]; the chevrons ([data-gallery-prev|next]) slide the track one card per click
 // (no scroll hijack - unlike the showcase). The dots ([data-gallery-dot], one per card) highlight the
-// leftmost visible card. Horizontal sibling of initShowcase; styles in site.less .section-fill--gallery.
+// leftmost visible card and click to jump the window there. Horizontal sibling of initShowcase;
+// styles in site.less .section-fill--gallery.
 function initGallery(section) {
   var track = section.querySelector('[data-gallery-track]');
   if (!track) { return; }                                // empty/unlinked gallery: nothing to drive
@@ -168,6 +169,17 @@ function initGallery(section) {
     next.addEventListener('click', function () {
       if (index < maxIndex()) { index++; update(); }
     });
+  }
+
+  // Dots jump the window straight to a card. The last (visible-1) dots can't be a leftmost index,
+  // so clicking one clamps to maxIndex() (the last full window). IIFE captures di in this var scope.
+  for (var i = 0; i < dots.length; i++) {
+    (function (di) {
+      dots[di].addEventListener('click', function () {
+        index = di > maxIndex() ? maxIndex() : di;
+        update();
+      });
+    })(i);
   }
 
   // Recompute on resize - step() depends on the vw-based card width. visible is fixed, so index stays valid.
