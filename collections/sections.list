@@ -17,7 +17,7 @@
       {.var @gallerySlug galleryCollection}
       <section class="section-fill section-fill--gallery" data-section-fill data-gallery>
         {.section @item}{.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}{.end}
-        <div class="section-fill__bar">{@secTitle}</div>
+        <div class="section-fill__bar">{@secTitle} | main=[{.section @item}{.main-image?}Y{.or}N{.end}{.end}] url=[{.section @item}{assetUrl}{.end}]</div>
         <div class="gallery__stage">
           <button class="gallery__chevron gallery__chevron--prev" data-gallery-prev aria-label="Previous" disabled></button>
           <div class="gallery__viewport">
