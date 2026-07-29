@@ -3,52 +3,26 @@
 // a bare `require` throws "require is not defined" and kills the whole file. ImageLoader is a
 // Squarespace runtime global (window.ImageLoader), used directly and guarded below - never bundled.
 
-// Showcase Window pin controller.
-// A [data-showcase] section stacks N absolutely-positioned [data-showcase-card] panes; only the
-// .is-active one is visible (styles in site.less .section-fill--showcase). While the section is the
-// one in view, wheel/touch is hijacked: each gesture advances the active card and the section stays
-// pinned. At either end (down on last card / up on first) the gesture is NOT consumed, so native
-// scroll-snap carries to the adjacent section. Mirrors the window.block layout per card.
-function initShowcase(section) {
-  var cards = section.querySelectorAll('[data-showcase-card]');
-  if (cards.length < 2) {
-    // Single (or zero) card: nothing to hijack - leave native scroll alone.
-    if (cards.length === 1) { cards[0].classList.add('is-active'); }
-    return;
-  }
-
-  var dots = section.querySelectorAll('.section-fill__dot');   // progress indicator, one per card
+// Showcase pin controller (native sticky-scroll - NO wheel/touch hijack).
+// The showcase (.showcase[data-showcase]) is a tall block with one native snap stop per card
+// ([data-showcase-stop] in .showcase__rail) behind a position:sticky frame ([data-showcase-stage]).
+// Native scroll + scroll-snap do ALL the stepping: smooth, one card per gesture, and the first/last
+// cards are real snap stops so they can never be skipped. This controller never touches the scroll -
+// it only reflects which stop is centred into the card slide (is-active/is-above/is-below on
+// [data-showcase-card]) and the dots. IntersectionObserver is fine here (unlike the old hijack, which
+// needed a synchronous engagement test to preventDefault): there is nothing to preventDefault, so a
+// one-frame async lag only trails the visual slide - native snap already owns the motion.
+// Styles: site.less .showcase / .section-fill--showcase.
+function initShowcase(root) {
+  var stage = root.querySelector('[data-showcase-stage]');
+  var cards = root.querySelectorAll('[data-showcase-card]');
+  var dots = root.querySelectorAll('[data-showcase-dot]');
+  var stops = root.querySelectorAll('[data-showcase-stop]');
   var index = 0;
-  var gestureGapMs = 120;      // idle gap that separates one scroll gesture (flick) from the next
-  var lastWheelTime = 0;       // timestamp of the previous wheel event
-  var fallbackMs = 700;        // guaranteed-progress floor: a held scroll still steps this often (no freeze)
-  var lastStep = 0;            // timestamp of the last actual card step
-  var touchStartY = null;
-  var touchThreshold = 40;     // px of vertical drag before a swap registers
 
-  // Fixed-header height: the scroll-snap line the section seats against.
-  function headerHeight() {
-    var header = document.querySelector('header');
-    return header ? header.getBoundingClientRect().height : 0;
-  }
-
-  // Synchronous engagement test (NOT IntersectionObserver - its async callback lags behind a fast
-  // flick, letting wheels pass through so native snap skips the whole section). True whenever the
-  // section straddles the vertical middle of the viewport, i.e. it is the dominant section on screen.
-  function coversCenter() {
-    var r = section.getBoundingClientRect();
-    var mid = window.innerHeight / 2;
-    return r.top <= mid && r.bottom >= mid;
-  }
-
-  // Section is seated at the snap line (its top sits just under the fixed header).
-  function aligned() {
-    return Math.abs(section.getBoundingClientRect().top - headerHeight()) < 6;
-  }
-
-  // Set each card's state by its index relative to the new active one: earlier cards park ABOVE,
-  // later cards park BELOW, active sits centred. This makes the slide directional without tracking
-  // the scroll direction - a forward step naturally rises from the bottom, a backward step from the top.
+  // Set each card's state by its index relative to the new active one: earlier cards park ABOVE, later
+  // cards park BELOW, active sits centred. Directional slide without tracking scroll direction. Keep the
+  // progress dots in sync - exactly one active.
   function setActive(next) {
     for (var i = 0; i < cards.length; i++) {
       cards[i].classList.remove('is-active', 'is-above', 'is-below');
@@ -60,7 +34,6 @@ function initShowcase(section) {
         cards[i].classList.add('is-active');
       }
     }
-    // Keep the progress indicator in sync - exactly one dot active.
     for (var d = 0; d < dots.length; d++) {
       if (d === next) {
         dots[d].classList.add('is-active');
@@ -71,62 +44,27 @@ function initShowcase(section) {
     index = next;
   }
 
-  // Seat the initial states, then flip on .is-ready. Card 0 is already at translateY(0) via CSS
-  // :first-child and the rest at translateY(100%), so enabling .is-ready moves nothing - the first
-  // card is pre-seated with no entrance animation; only later scroll steps animate.
-  setActive(0);
-  section.classList.add('is-ready');
-
-  // Shared step logic for wheel + touch. dir: +1 down, -1 up. allowStep gates the actual card advance.
-  // Returns true if the gesture was consumed (caller should preventDefault); false to release to native snap.
-  // Gesture-based with a guaranteed-progress floor. A discrete flick advances ~ONE card: the flick's
-  // trailing inertia keeps firing wheel events, but they share the gesture (allowStep=false) so the
-  // section stays pinned WITHOUT stepping - stops a single hard flick from walking through every card,
-  // and catches an inertial scroll entering from the neighbouring section. The floor (see wheel handler)
-  // still lets a sustained scroll step every fallbackMs, so a continuous stream can never freeze - it
-  // steps steadily and releases at the last card. allowStep records lastStep so the floor measures from
-  // the last real advance.
-  function handle(dir, allowStep) {
-    if (!coversCenter()) { return false; }      // not the dominant section - leave native scroll alone
-    var atBoundary = (dir > 0 && index === cards.length - 1) ||
-                     (dir < 0 && index === 0);
-    if (atBoundary) { return false; }          // let native snap move to the next/prev section
-    // Force-seat to the snap line if a fast flick left the section mid-viewport, so cards always
-    // swap from the aligned frame (otherwise the section can be pinned half-scrolled and look skipped).
-    if (!aligned()) {
-      window.scrollTo(0, window.pageYOffset + section.getBoundingClientRect().top - headerHeight());
-    }
-    if (allowStep) { setActive(index + dir); lastStep = Date.now(); }
-    return true;                               // pinned: consume the gesture (step or hold)
+  if (cards.length < 2) {
+    // Single (or zero) card: nothing to step - just seat it.
+    if (cards.length === 1) { cards[0].classList.add('is-active'); }
+    if (stage) { stage.classList.add('is-ready'); }
+    return;
   }
 
-  window.addEventListener('wheel', function (e) {
-    if (e.deltaY === 0) { return; }
-    var now = Date.now();
-    var freshGesture = (now - lastWheelTime) > gestureGapMs;   // inertia from one flick shares a gesture
-    lastWheelTime = now;
-    // Step on a fresh flick, OR on the fallback floor so a non-stop wheel stream can never stall.
-    var allow = freshGesture || (now - lastStep >= fallbackMs);
-    if (handle(e.deltaY > 0 ? 1 : -1, allow)) { e.preventDefault(); }
-  }, { passive: false });
+  // Seat card 0, then flip .is-ready on the stage so the CSS park positions engage with no entrance anim.
+  setActive(0);
+  if (stage) { stage.classList.add('is-ready'); }
 
-  window.addEventListener('touchstart', function (e) {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-
-  window.addEventListener('touchmove', function (e) {
-    if (touchStartY === null) { return; }
-    var delta = touchStartY - e.touches[0].clientY;   // drag up (next) = positive
-    if (Math.abs(delta) < touchThreshold) { return; }
-    if (handle(delta > 0 ? 1 : -1, true)) {           // threshold+reset already gate touch steps
-      e.preventDefault();
-      touchStartY = e.touches[0].clientY;             // reset so the next step needs a fresh drag
+  // Reflect the centred stop into the active card. rootMargin -50%/-50% collapses the root to a single
+  // horizontal line at the viewport middle; the stop crossing it is the one filling the screen.
+  var io = new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      if (!entries[i].isIntersecting) { continue; }
+      var idx = Array.prototype.indexOf.call(stops, entries[i].target);
+      if (idx !== -1 && idx !== index) { setActive(idx); }
     }
-  }, { passive: false });
-
-  window.addEventListener('touchend', function () {
-    touchStartY = null;
-  }, { passive: true });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+  for (var s = 0; s < stops.length; s++) { io.observe(stops[s]); }
 }
 
 // Gallery carousel controller.

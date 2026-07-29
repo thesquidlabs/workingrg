@@ -45,19 +45,26 @@
         </div>
       </section>
     {.or}{.equal? sectionType "showcase"}
-      <section class="section-fill section-fill--window section-fill--showcase" data-section-fill data-showcase>
+      <div class="showcase" data-showcase>
         <squarespace:query collection="showcase">
-          {.repeated section items}
-            {@|apply showcase-card.block}
-          {.end}
-          <div class="section-fill__dots">
+          <div class="showcase__stage section-fill section-fill--window section-fill--showcase" data-section-fill data-showcase-stage>
             {.repeated section items}
-              <span class="section-fill__dot"></span>
+              {@|apply showcase-card.block}
+            {.end}
+            <div class="section-fill__dots">
+              {.repeated section items}
+                <span class="section-fill__dot" data-showcase-dot></span>
+              {.end}
+            </div>
+            <div class="glass"></div>
+          </div>
+          <div class="showcase__rail" aria-hidden="true">
+            {.repeated section items}
+              <div class="showcase__stop" data-showcase-stop></div>
             {.end}
           </div>
         </squarespace:query>
-        <div class="glass"></div>
-      </section>
+      </div>
     {.or}{.equal? sectionType "window"}
       {@item|apply window.block}
     {.or}
