@@ -1,14 +1,16 @@
 <!-- Gallery card: one Showcase-Gallery-collection item rendered as a boxed white card. -->
-<!-- Applied per item from the <squarespace:query> loop in collections/sections.list (sectionType=="gallery") -->
-<!-- and from collections/showcasegallery.list. Pure markup applied at the query item's scope -->
-<!-- (base image/text item: image + title + body). squarespace: tags must NOT live in a .block. -->
+<!-- Applied per item from the squarespace:query loop in collections/sections.list (gallery -->
+<!-- section type) and from collections/showcasegallery.list. Pure markup at the query item's -->
+<!-- scope (base image/text item: image + title + body). squarespace: tags must NOT live in a block. -->
 <!-- Three content states, each its own modifier (styles in site.less .section-fill--gallery): -->
-<!--   --full  = image + text (title and/or body)   --image = image only   --text = title/body, no image -->
-<!-- CRITICAL: each predicate branch emits its OWN complete, balanced <div>...</div>. Do NOT open the -->
-<!-- outer <div> in one branch and close it after the {.end} - the JSONT compiler drops a tag split -->
-<!-- across predicates and the applied block renders NOTHING (empty track). This bit us once. -->
-<!-- title?: {.field?} is truthy on "" - skip a blank title via {.equal? title ""}; body uses {.if body}. -->
-<!-- JS hook: data-gallery-card (carousel measures its width). Never put JSON-T tags in comments - they evaluate. -->
+<!--   full  = image + text (title and/or body)   image = image only   text = title/body, no image -->
+<!-- CRITICAL, TWO rules this block violated before and rendered NOTHING when applied: -->
+<!--   1. NEVER put JSON-T braces/tags in these comments - they still evaluate and void the block. -->
+<!--      That is why every predicate below is described in prose, no braces. -->
+<!--   2. Each predicate branch emits its OWN complete, balanced div - never open the outer div in -->
+<!--      one branch and close it after the end tag; the compiler drops a tag split across predicates. -->
+<!-- Title is skipped when blank via an equal-empty test (a field-exists test is truthy on ""); -->
+<!-- body uses an if-body test (empty = false). JS hook: data-gallery-card (carousel measures width). -->
 {.main-image?}
   {.equal? title ""}
     {.if body}
