@@ -21,6 +21,8 @@ function initShowcase(section) {
   var index = 0;
   var gestureGapMs = 120;      // idle gap that separates one scroll gesture (flick) from the next
   var lastWheelTime = 0;       // timestamp of the previous wheel event
+  var fallbackMs = 700;        // guaranteed-progress floor: a held scroll still steps this often (no freeze)
+  var lastStep = 0;            // timestamp of the last actual card step
   var touchStartY = null;
   var touchThreshold = 40;     // px of vertical drag before a swap registers
 
@@ -77,11 +79,13 @@ function initShowcase(section) {
 
   // Shared step logic for wheel + touch. dir: +1 down, -1 up. allowStep gates the actual card advance.
   // Returns true if the gesture was consumed (caller should preventDefault); false to release to native snap.
-  // Gesture-based, not time-throttled: a discrete flick advances exactly ONE card. The flick's trailing
-  // inertia keeps firing wheel events, but they share the gesture (allowStep=false) so the section stays
-  // pinned WITHOUT stepping - this is what stops a single hard flick from walking through every card and
-  // exiting, and it catches an inertial scroll entering from the neighbouring section. Only a fresh
-  // gesture (idle gap > gestureGapMs) or a fresh touch drag advances again.
+  // Gesture-based with a guaranteed-progress floor. A discrete flick advances ~ONE card: the flick's
+  // trailing inertia keeps firing wheel events, but they share the gesture (allowStep=false) so the
+  // section stays pinned WITHOUT stepping - stops a single hard flick from walking through every card,
+  // and catches an inertial scroll entering from the neighbouring section. The floor (see wheel handler)
+  // still lets a sustained scroll step every fallbackMs, so a continuous stream can never freeze - it
+  // steps steadily and releases at the last card. allowStep records lastStep so the floor measures from
+  // the last real advance.
   function handle(dir, allowStep) {
     if (!coversCenter()) { return false; }      // not the dominant section - leave native scroll alone
     var atBoundary = (dir > 0 && index === cards.length - 1) ||
@@ -92,7 +96,7 @@ function initShowcase(section) {
     if (!aligned()) {
       window.scrollTo(0, window.pageYOffset + section.getBoundingClientRect().top - headerHeight());
     }
-    if (allowStep) { setActive(index + dir); }
+    if (allowStep) { setActive(index + dir); lastStep = Date.now(); }
     return true;                               // pinned: consume the gesture (step or hold)
   }
 
@@ -101,7 +105,9 @@ function initShowcase(section) {
     var now = Date.now();
     var freshGesture = (now - lastWheelTime) > gestureGapMs;   // inertia from one flick shares a gesture
     lastWheelTime = now;
-    if (handle(e.deltaY > 0 ? 1 : -1, freshGesture)) { e.preventDefault(); }
+    // Step on a fresh flick, OR on the fallback floor so a non-stop wheel stream can never stall.
+    var allow = freshGesture || (now - lastStep >= fallbackMs);
+    if (handle(e.deltaY > 0 ? 1 : -1, allow)) { e.preventDefault(); }
   }, { passive: false });
 
   window.addEventListener('touchstart', function (e) {
