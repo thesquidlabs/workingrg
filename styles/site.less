@@ -454,6 +454,7 @@ nav.site-nav {
     align-items: center;
     width: 100%;
     box-sizing: border-box;
+    min-height: 0;                           // let tall cards clip, not grow the fixed-height stage
     padding: 0 @padding-l;                   // enclosing left/right margins (match window variant)
   }
 
@@ -461,6 +462,8 @@ nav.site-nav {
   .gallery__viewport {
     flex: 1;
     min-width: 0;
+    min-height: 0;
+    align-self: stretch;                     // fill the stage height (chevrons stay centred)
     overflow: hidden;
   }
 
@@ -468,6 +471,8 @@ nav.site-nav {
   .gallery__track {
     display: flex;
     flex-direction: row;
+    height: 100%;                            // fill the viewport so cards clamp to a uniform height
+    align-items: stretch;
     gap: @padding-gap;
     transition: transform @gallery-slide ease;
   }
@@ -477,6 +482,8 @@ nav.site-nav {
   .gallery-card {
     flex: 0 0 ~"calc((100% - 2 * @{padding-gap}) / 3)";
     box-sizing: border-box;
+    max-height: 100%;                        // clamp to the stage; over-long bodies scroll (below)
+    overflow: hidden;
     background-color: @white;
     padding: @padding-s;
     box-shadow: 0 2px 8px fade(@navy, 20%);  // subtle lift off the background image
@@ -502,6 +509,8 @@ nav.site-nav {
   .gallery-card__body {
     .text-style(@font-lato, 1.25rem, false);
     color: @navy;
+    min-height: 0;                           // allow scroll instead of growing the card
+    overflow-y: auto;                        // long testimonials scroll within the card
   }
 
   // Text-only card: no image, centre the title/body block.

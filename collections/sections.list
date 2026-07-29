@@ -16,7 +16,7 @@
       <!-- read via @item because the query below re-scopes to the queried card collection. JS: data-gallery. -->
       {.var @gallerySlug galleryCollection}
       <section class="section-fill section-fill--gallery" data-section-fill data-gallery>
-        {.section @item}{.main-image?}<img class="section-fill__image" {@|image-meta} alt="{title}" />{.end}{.end}
+        {.section @item}{.main-image?}<img class="section-fill__image" src="{assetUrl}?format=1500w" alt="{title}" />{.end}{.end}
         <div class="section-fill__bar">{@secTitle}</div>
         <div class="gallery__stage">
           <button class="gallery__chevron gallery__chevron--prev" data-gallery-prev aria-label="Previous" disabled></button>
